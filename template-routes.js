@@ -27,7 +27,7 @@ import {
   educationTemplates,
   familyTemplates,
   timelineTemplates,
-} from './templates/sections.js';
+} from './sections.js'
 
 const router = Router();
 
