@@ -18,7 +18,7 @@
 // ── Config ────────────────────────────────────────────────────
 // Development : 'http://localhost:3001'
 // Production  : 'https://your-backend-domain.com'
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = 'https://astroverse-0rzo.onrender.com';
 
 // ── Generic POST helper ───────────────────────────────────────
 async function apiPost(endpoint, body) {
