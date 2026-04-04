@@ -22,6 +22,7 @@ import 'dotenv/config';
 import templateRouter from './template-routes.js';
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 3001;
 
 // ── Trust proxy (needed for rate-limiter to work correctly behind Nginx/Cloudflare)
