@@ -1707,7 +1707,7 @@ function renderResult({name,dob,time,place,gender,lang,isHi,planets,sunSign,moon
   // ── Fetch all sections from template backend ──
   // chartDataFull set hone ke baad background mein fetch karo
   setTimeout(async () => {
-    const BACKEND = (typeof BACKEND_URL !== 'undefined') ? BACKEND_URL : 'http://localhost:3001';
+    const BACKEND = (typeof BACKEND_URL !== 'undefined') ? BACKEND_URL : 'https://astroverse-0rzo.onrender.com';
     try {
       const payload = _buildChartPayload();
       const resp = await fetch(`${BACKEND}/api/template/full-analysis`, {
