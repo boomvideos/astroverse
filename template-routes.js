@@ -16,7 +16,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { Router } from 'express';
-import { extractChartContext, generateSection } from './templates/engine.js';
+import { extractChartContext, generateSection } from './engine.js'
 import { personalityTemplates } from './templates/personality.js';
 import {
   careerTemplates,
