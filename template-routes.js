@@ -17,7 +17,7 @@
 
 import { Router } from 'express';
 import { extractChartContext, generateSection } from './engine.js'
-import { personalityTemplates } from './templates/personality.js';
+import { personalityTemplates } from './personality.js'
 import {
   careerTemplates,
   relationshipTemplates,
