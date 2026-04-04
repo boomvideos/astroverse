@@ -26,6 +26,11 @@ app.use(cors({
   origin: "*"
 }));
 app.options('*', cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  next();
+});
 const PORT = process.env.PORT || 3001;
 
 // ── Trust proxy (needed for rate-limiter to work correctly behind Nginx/Cloudflare)
