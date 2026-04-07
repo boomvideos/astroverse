@@ -16,8 +16,8 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { Router } from 'express';
-import { extractChartContext, generateSection } from './engine.js'
-import { personalityTemplates } from './personality.js'
+import { extractChartContext, generateSection } from './templates/engine.js';
+import { personalityTemplates } from './templates/personality.js';
 import {
   careerTemplates,
   relationshipTemplates,
@@ -27,8 +27,7 @@ import {
   educationTemplates,
   familyTemplates,
   timelineTemplates,
-} from './sections.js'
-
+} from './templates/sections.js';
 const router = Router();
 
 // ── Template map (used by full-analysis) ─────────────────────
