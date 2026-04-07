@@ -15,7 +15,7 @@ import { ipLimiter, userLimiter, strictUserLimiter } from './src/middleware/rate
 
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
-import supportRouter  from './src/routes/support.js';
+//import supportRouter  from './src/routes/support.js';
 
 // ── Validate critical env vars at startup ─────────────────────
 const REQUIRED_ENV = ['ANTHROPIC_API_KEY', 'CLERK_SECRET_KEY', 'ALLOWED_ORIGIN'];
@@ -134,7 +134,7 @@ ${planetLines}`.trim();
 // ── Public routes (IP rate-limited) ──────────────────────────
 app.use('/sitemap.xml', sitemapRouter);
 app.use('/robots.txt',  sitemapRouter);
-app.use('/api/support', supportRouter);
+//app.use('/api/support', supportRouter);
 
 // ── Template routes (optional auth, IP rate-limited) ──────────
 app.use('/api/template', ipLimiter, optionalAuth, templateRouter);
