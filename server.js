@@ -18,7 +18,7 @@ import sitemapRouter  from './src/routes/sitemap.js';
 //import supportRouter  from './src/routes/support.js';
 
 // ── Validate critical env vars at startup ─────────────────────
-const REQUIRED_ENV = ['ANTHROPIC_API_KEY', 'CLERK_SECRET_KEY', 'ALLOWED_ORIGIN'];
+const REQUIRED_ENV = ['ALLOWED_ORIGIN'];
 const missing = REQUIRED_ENV.filter(k => !process.env[k]);
 if (missing.length > 0) {
   console.error(`\n❌ Missing required env vars: ${missing.join(', ')}\n   Add them to .env\n`);
