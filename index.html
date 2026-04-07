@@ -404,6 +404,12 @@ footer{background:rgba(5,8,16,0.98);border-top:1px solid var(--border);
 }
 
 </style>
+  <script
+  async
+  crossorigin="anonymous"
+  data-clerk-publishable-key="pk_test_bGFzdGluZy1nbGlkZXItNDUuY2xlcmsuYWNjb3VudHMuZGV2JA"
+  src="https://cdn.clerk.com/clerk.js">
+</script>
 </head>
 <body>
 
@@ -440,7 +446,9 @@ footer{background:rgba(5,8,16,0.98);border-top:1px solid var(--border);
       <button id="langBtnEn" onclick="switchLang('en')" style="padding:6px 10px;background:var(--gold);color:var(--deep);border:none;cursor:pointer;font-family:inherit;font-size:0.65rem;letter-spacing:1px;">EN</button>
       <button id="langBtnHi" onclick="switchLang('hi')" style="padding:6px 10px;background:transparent;color:var(--gold);border:none;cursor:pointer;font-family:inherit;font-size:0.65rem;letter-spacing:1px;">हिं</button>
     </div>
-    <button class="nav-cta" onclick="startJourney()" style="position:relative;z-index:600;">☸ Get Kundli</button>
+   <button class="nav-cta" id="btnSignIn" onclick="openClerkSignIn()" style="position:relative;z-index:600;">
+  Sign In
+</button>
   </div>
 </nav>
 
@@ -713,6 +721,18 @@ footer{background:rgba(5,8,16,0.98);border-top:1px solid var(--border);
 </div>
 </div>
 <script>
+  // ─── Clerk Auth ───────────────────────────────
+async function initClerk() {
+  if (!window.Clerk) {
+    console.error("Clerk not loaded");
+    return;
+  }
+  await Clerk.load();
+}
+
+function openClerkSignIn() {
+  initClerk().then(() => Clerk.openSignIn());
+}
 window.onerror = function(msg, src, line, col, err) {
   console.error('JS Error:', msg, 'Line:', line);
 };
