@@ -140,10 +140,11 @@ app.use('/robots.txt',  sitemapRouter);
 app.use('/api/template', ipLimiter, optionalAuth, templateRouter);
 
 // ── AI endpoints (require auth, user-ID rate-limited) ─────────
-
+/*
 // POST /api/kundli-analysis
 app.post('/api/kundli-analysis', requireAuth, userLimiter, async (req, res) => {
   try {
+    */
     const { chartData, lang = 'en' } = req.body;
     if (!chartData || !chartData.dob) {
       return res.status(400).json({ error: 'chartData with dob is required' });
