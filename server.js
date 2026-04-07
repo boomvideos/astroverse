@@ -15,6 +15,7 @@ import { ipLimiter, userLimiter, strictUserLimiter } from './src/middleware/rate
 
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
+import templateRouter from './template-routes.js';
 //import supportRouter  from './src/routes/support.js';
 
 // ── Validate critical env vars at startup ─────────────────────
