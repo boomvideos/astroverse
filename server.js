@@ -9,12 +9,13 @@ import 'dotenv/config';
 import Anthropic from '@anthropic-ai/sdk';
 
 // ── Auth & Rate Limiters ──────────────────────────────────────
-import { clerkHandler, requireAuth, optionalAuth } from './middleware/auth.js';
-import { ipLimiter, userLimiter, strictUserLimiter } from './middleware/rateLimiter.js';
+import { clerkHandler, requireAuth, optionalAuth } from './src/middleware/auth.js';
+import { ipLimiter, userLimiter, strictUserLimiter } from './src/middleware/rateLimiter.js';
+
 
 // ── Routes ───────────────────────────────────────────────────
-import templateRouter from './template-routes.js';
-import supportRouter  from './routes/support.js';
+import sitemapRouter  from './src/routes/sitemap.js';
+import supportRouter  from './src/routes/support.js';
 import sitemapRouter  from './routes/sitemap.js';
 
 // ── Validate critical env vars at startup ─────────────────────
