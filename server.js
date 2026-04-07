@@ -16,7 +16,6 @@ import { ipLimiter, userLimiter, strictUserLimiter } from './src/middleware/rate
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
 import supportRouter  from './src/routes/support.js';
-import sitemapRouter  from './routes/sitemap.js';
 
 // ── Validate critical env vars at startup ─────────────────────
 const REQUIRED_ENV = ['ANTHROPIC_API_KEY', 'CLERK_SECRET_KEY', 'ALLOWED_ORIGIN'];
