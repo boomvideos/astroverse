@@ -56,7 +56,9 @@ app.use(express.json({ limit: '10kb' }));
 app.use(clerkHandler);
 
 // ── Anthropic client ──────────────────────────────────────────
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const anthropic = process.env.ANTHROPIC_API_KEY
+  ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  : null;
 const CLAUDE_MODEL = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514';
 
 // ═══════════════════════════════════════════════════════════════
@@ -69,6 +71,7 @@ function sanitize(str, maxLen = 200) {
 }
 
 async function callClaude(systemPrompt, userPrompt, maxTokens = 1000) {
+  if (!anthropic) throw new Error('AI disabled (missing ANTHROPIC_API_KEY)');
   const response = await anthropic.messages.create({
     model: CLAUDE_MODEL,
     max_tokens: maxTokens,
@@ -133,8 +136,7 @@ ${planetLines}`.trim();
 // ═══════════════════════════════════════════════════════════════
 
 // ── Public routes (IP rate-limited) ──────────────────────────
-app.use('/sitemap.xml', sitemapRouter);
-app.use('/robots.txt',  sitemapRouter);
+app.use('/', sitemapRouter);
 //app.use('/api/support', supportRouter);
 
 // ── Template routes (optional auth, IP rate-limited) ──────────
