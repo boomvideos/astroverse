@@ -144,7 +144,7 @@ app.use('/api/template', ipLimiter, optionalAuth, templateRouter);
 // POST /api/kundli-analysis
 app.post('/api/kundli-analysis', requireAuth, userLimiter, async (req, res) => {
   try {
-    */
+  
     const { chartData, lang = 'en' } = req.body;
     if (!chartData || !chartData.dob) {
       return res.status(400).json({ error: 'chartData with dob is required' });
@@ -290,7 +290,7 @@ app.post('/api/numerology', requireAuth, userLimiter, async (req, res) => {
     res.status(500).json({ error: 'Numerology analysis failed.' });
   }
 });
-
+*/
 // GET /api/health
 app.get('/api/health', (req, res) => {
   res.json({
