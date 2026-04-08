@@ -1,7 +1,7 @@
 // frontend/src/pages/Privacy.jsx
 import { Helmet } from 'react-helmet-async';
 
-const APP_URL  = import.meta.env.VITE_APP_URL || 'https://astroverse.app';
+const APP_URL  = import.meta.env.VITE_APP_URL || 'https://http://astromaya.me/';
 const APP_NAME = import.meta.env.VITE_APP_NAME || 'AstroVerse AI';
 const UPDATED  = '1 April 2025';
 
@@ -87,7 +87,7 @@ export default function Privacy() {
             <li>Withdraw consent for analytics at any time via the cookie preference centre.</li>
             <li>Lodge a complaint with your local data protection authority.</li>
           </ul>
-          <p>To exercise these rights, email us at <a href="mailto:privacy@astroverse.app">privacy@astroverse.app</a>.</p>
+          <p>To exercise these rights, email us at <a href="mailto:privacy@http://astromaya.me/">privacy@http://astromaya.me/</a>.</p>
         </section>
 
         <section>
@@ -110,7 +110,7 @@ export default function Privacy() {
         <section>
           <h2>8. Contact</h2>
           <p>
-            Questions about this policy? Email <a href="mailto:privacy@astroverse.app">privacy@astroverse.app</a>.
+            Questions about this policy? Email <a href="mailto:privacy@http://astromaya.me/">privacy@http://astromaya.me/</a>.
           </p>
         </section>
       </article>
