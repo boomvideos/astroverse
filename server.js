@@ -33,12 +33,10 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 
 // ── CORS (single, correct registration) ──────────────────────
-// FIXED: was registered 3× before; manual res.header() removed.
 const allowedOrigins = (process.env.ALLOWED_ORIGIN || '').split(',').map(s => s.trim());
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow server-to-server requests (no Origin header) and whitelisted origins
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   methods: ['GET', 'POST'],
@@ -102,7 +100,6 @@ function buildChartSummary(chartData) {
   const kaalSarp = doshas.find(d => d.name?.includes('Kaal Sarp'));
   const sadeSati = doshas.find(d => d.name?.includes('Sade Sati'));
 
-  // FIXED: sanitize ALL user-supplied fields including dob and time
   const safeName   = sanitize(name, 80);
   const safeDob    = sanitize(dob, 20);
   const safeTime   = sanitize(time, 10);
@@ -147,7 +144,6 @@ app.use('/api/template', ipLimiter, optionalAuth, templateRouter);
 // POST /api/kundli-analysis
 app.post('/api/kundli-analysis', requireAuth, userLimiter, async (req, res) => {
   try {
-  
     const { chartData, lang = 'en' } = req.body;
     if (!chartData || !chartData.dob) {
       return res.status(400).json({ error: 'chartData with dob is required' });
@@ -239,7 +235,6 @@ app.post('/api/magic-search', requireAuth, strictUserLimiter, async (req, res) =
             `${chartSummary}\n\nQuestion (${safeType}): "${safeText}"\n\nAnswer in 4-5 sentences:`,
             450
           );
-          // FIXED: return sanitized text, not raw q.text (XSS fix)
           return { type: sanitize(q.type, 50), text: safeText, answer };
         })
       );
@@ -294,6 +289,7 @@ app.post('/api/numerology', requireAuth, userLimiter, async (req, res) => {
   }
 });
 */
+
 // GET /api/health
 app.get('/api/health', (req, res) => {
   res.json({
@@ -305,7 +301,6 @@ app.get('/api/health', (req, res) => {
 });
 
 // ── Graceful shutdown ─────────────────────────────────────────
-// Handles SIGTERM from Render/Railway — lets in-flight requests finish.
 const server = app.listen(PORT, () => {
   console.log(`\n✅  AstroVerse Backend v3 running on port ${PORT}`);
   console.log(`    Auth    : Clerk`);
@@ -320,6 +315,5 @@ process.on('SIGTERM', () => {
     console.log('Server closed.');
     process.exit(0);
   });
-  // Force exit after 30s if requests are still in flight
   setTimeout(() => process.exit(1), 30_000);
 });
