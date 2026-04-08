@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { SignedIn, SignedOut } from '@clerk/clerk-react';
 
-const APP_URL = import.meta.env.VITE_APP_URL || 'https://astroverse.app';
+const APP_URL = import.meta.env.VITE_APP_URL || 'http://astromaya.me/';
 
 export default function Home() {
   return (
