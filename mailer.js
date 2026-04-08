@@ -11,8 +11,8 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = process.env.SUPPORT_EMAIL_FROM || 'noreply@astroverse.app';
-const TO   = process.env.SUPPORT_EMAIL_TO   || 'support@astroverse.app';
+const FROM = process.env.SUPPORT_EMAIL_FROM || 'noreply@http://astromaya.me/';
+const TO   = process.env.SUPPORT_EMAIL_TO   || 'support@http://astromaya.me/';
 
 // ── Generic send helper ───────────────────────────
 async function sendEmail({ to, subject, html, replyTo }) {
