@@ -59,8 +59,10 @@ function validateChartData(chartData, res) {
 }
 
 // ── Error helper ──────────────────────────────────────────────
+// FIX: Added err.stack to log so Render.com logs show the actual
+// crash location instead of just the error message.
 function handleError(res, endpoint, err) {
-  console.error(`[/api/template/${endpoint}]`, err.message);
+  console.error(`[/api/template/${endpoint}]`, err.message, '\n', err.stack);
   res.status(500).json({ error: `Analysis failed for ${endpoint}. Please try again.` });
 }
 
