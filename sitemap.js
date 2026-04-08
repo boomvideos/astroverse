@@ -10,7 +10,7 @@ import { Router } from 'express';
 
 const router = Router();
 
-const APP_URL = process.env.APP_URL || 'https://astroverse.app';
+const APP_URL = process.env.APP_URL || 'https://http://astromaya.me/';
 
 // Static pages to include
 const STATIC_PAGES = [
