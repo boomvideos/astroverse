@@ -39,7 +39,8 @@ async function checkBackend() {
   try {
     const res  = await fetch(`${BACKEND_URL}/api/health`);
     const data = await res.json();
-    console.log(`✅ AstroVerse Backend connected — model: ${data.aiModel}`);
+    // FIX: was data.aiModel — health endpoint returns field named 'model', not 'aiModel'
+    console.log(`✅ AstroVerse Backend connected — model: ${data.model}`);
     return true;
   } catch (e) {
     console.warn('⚠️ AstroVerse Backend not reachable. AI features will be unavailable.');
