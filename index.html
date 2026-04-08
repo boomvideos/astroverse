@@ -2135,7 +2135,7 @@ async function searchPlace(val) {
     try {
       // Use Nominatim (OpenStreetMap) — no API key needed, works globally
       const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&q=${encodeURIComponent(val)}&accept-language=en`;
-      const res = await fetch(url, { headers: { 'User-Agent': 'AstroVerseAI/2.0 (astroverse.app)' } });
+      const res = await fetch(url, { headers: { 'User-Agent': 'AstroVerseAI/2.0 (http://astromaya.me/)' } });
       if(!res.ok) throw new Error('API error');
       const data = await res.json();
       if(!data.length) { box.innerHTML = `<div class="place-item" style="color:var(--muted);cursor:default">No results — try a different spelling</div>`; box.style.display='block'; return; }
