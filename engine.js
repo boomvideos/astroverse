@@ -210,6 +210,12 @@ export function extractChartContext(chartData) {
 // Tie-break: template.weight field (higher = higher priority).
 // ═══════════════════════════════════════════════════════════════
 export function getTemplate(templates, context) {
+  // FIX: Guard against empty or missing templates array.
+  // Previously templates[-1] = undefined → fillTemplate crash → 500 error.
+  if (!templates || templates.length === 0) {
+    throw new Error('getTemplate called with empty templates array');
+  }
+
   let best      = null;
   let bestScore = -1;
 
