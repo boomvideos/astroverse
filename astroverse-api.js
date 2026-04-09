@@ -39,7 +39,7 @@ async function checkBackend() {
   try {
     const res  = await fetch(`${BACKEND_URL}/api/health`);
     const data = await res.json();
-    console.log(`✅ AstroVerse Backend connected — service: ${data.service}`);
+    console.log(`✅ AstroVerse Backend connected — service: ${data.service || 'AstroVerse'}`);
     return true;
   } catch (e) {
     console.warn('⚠️ AstroVerse Backend not reachable. Template features will be unavailable.');

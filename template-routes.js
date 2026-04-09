@@ -67,7 +67,7 @@ const DASHA_THEMES = {
 // ── Zod schemas ───────────────────────────────────────────────
 const PlanetSchema = z.object({
   name:  z.string(),
-  sign:  z.any().optional(),
+  sign:  z.union([z.string(), z.object({}).passthrough()]).optional(),
   house: z.number().optional(),
 }).passthrough();
 
