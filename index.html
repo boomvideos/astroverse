@@ -721,6 +721,16 @@ footer{background:rgba(5,8,16,0.98);border-top:1px solid var(--border);
 </div>
 </div>
 <script>
+  // ── XSS-safe HTML escaping helper ─────────────────────────────
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   // ─── Clerk Auth ───────────────────────────────
 async function initClerk() {
   if (!window.Clerk) {
@@ -1781,7 +1791,7 @@ function renderResult({name,dob,time,place,gender,lang,isHi,planets,sunSign,moon
   <div class="kundli-wow-header">
     <div class="kundli-wow-badge">✦ ${isHi?'जन्म कुंडली':'JANMA KUNDLI'} · ${dob_d.getFullYear()} ✦</div>
     <div style="font-size:clamp(3rem,10vw,6rem);margin-bottom:8px;filter:drop-shadow(0 0 30px rgba(201,168,76,0.5));animation:emblem-glow 4s ease-in-out infinite;">${sunSign.icon}</div>
-    <div class="kundli-wow-name">${name.toUpperCase()}</div>
+    <div class="kundli-wow-name">${escapeHtml(name.toUpperCase())}</div>
     <div class="kundli-wow-headline">${isHi
       ? `${sunSign.hi||sunSign.name} राशि · ${ascendant.sign?.hi||ascendant.sign?.name||'—'} लग्न · ${nakshatra?.name} नक्षत्र`
       : `${sunSign.name} Sun · ${ascendant.sign?.name||'—'} Ascendant · ${nakshatra?.name} Nakshatra`
@@ -2044,7 +2054,7 @@ async function checkCompat() {
   document.getElementById('aiLoader').classList.add('hidden');
   document.getElementById('compatResult').innerHTML=`
   <div class="sec-card">
-    <div class="sec-header"><span class="sec-ico">💞</span><span class="sec-title">${n1} & ${n2}</span><span class="sec-badge">✓ Ashta Kuta</span></div>
+    <div class="sec-header"><span class="sec-ico">💞</span><span class="sec-title">${escapeHtml(n1)} & ${escapeHtml(n2)}</span><span class="sec-badge">✓ Ashta Kuta</span></div>
     <div class="sec-body">
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-size:3rem;margin-bottom:8px">${z1.icon} 💞 ${z2.icon}</div>
@@ -2094,7 +2104,7 @@ async function genNumerology() {
   document.getElementById('aiLoader').classList.add('hidden');
   document.getElementById('numerologyResult').innerHTML=`
   <div class="sec-card">
-    <div class="sec-header"><span class="sec-ico">⭐</span><span class="sec-title">${name.toUpperCase()}</span><span class="sec-badge">✓ Calculated</span></div>
+    <div class="sec-header"><span class="sec-ico">⭐</span><span class="sec-title">${escapeHtml(name.toUpperCase())}</span><span class="sec-badge">✓ Calculated</span></div>
     <div class="sec-body">
       <div style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:0.72rem;color:#86efac;">
         ⚙️ <strong>Method:</strong> Pythagorean digit-sum reduction. Values are mathematically derived — no estimates.

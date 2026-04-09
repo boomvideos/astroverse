@@ -16,6 +16,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 import { Router } from 'express';
+import { z } from 'zod';
 import { extractChartContext, generateSection } from './engine.js';
 import { personalityTemplates } from './personality.js';
 import {
@@ -28,7 +29,12 @@ import {
   familyTemplates,
   timelineTemplates,
 } from './sections.js';
+import { ipLimiter } from './rateLimiter.js';
+
 const router = Router();
+
+// Apply IP rate-limiter to all template routes
+router.use(ipLimiter);
 
 // ── Template map (used by full-analysis) ─────────────────────
 const TEMPLATE_MAP = {
@@ -45,21 +51,52 @@ const TEMPLATE_MAP = {
 
 const ALL_SECTIONS = Object.keys(TEMPLATE_MAP);
 
+// ── Dasha themes (module-level) ───────────────────────────────
+const DASHA_THEMES = {
+  Sun:     'Leadership, Father, Authority, Self-expression',
+  Moon:    'Mind, Mother, Home, Emotions, Travel',
+  Mars:    'Energy, Action, Property, Siblings, Courage',
+  Mercury: 'Communication, Business, Skills, Learning',
+  Jupiter: 'Expansion, Wealth, Children, Wisdom, Marriage',
+  Venus:   'Love, Beauty, Art, Luxury, Relationships',
+  Saturn:  'Discipline, Karma, Delay, Transformation, Longevity',
+  Rahu:    'Ambition, Foreign, Technology, Sudden Events',
+  Ketu:    'Spirituality, Liberation, Past Life, Detachment',
+};
+
+// ── Zod schemas ───────────────────────────────────────────────
+const PlanetSchema = z.object({
+  name:  z.string(),
+  sign:  z.any().optional(),
+  house: z.number().optional(),
+}).passthrough();
+
+const ChartDataSchema = z.object({
+  dob:      z.string().min(1),
+  planets:  z.array(PlanetSchema),
+}).passthrough();
+
+const SectionBodySchema = z.object({
+  chartData: ChartDataSchema,
+  lang:      z.string().optional().default('en'),
+});
+
+const FullAnalysisBodySchema = SectionBodySchema.extend({
+  sections: z.array(z.string()).optional(),
+});
+
 // ── Validation helper ─────────────────────────────────────────
-function validateChartData(chartData, res) {
-  if (!chartData || !chartData.dob) {
-    res.status(400).json({ error: 'chartData with dob is required' });
-    return false;
+function validateBody(schema, body, res) {
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    res.status(400).json({ error: result.error.errors[0]?.message || 'Invalid request body' });
+    return null;
   }
-  if (!chartData.planets || !Array.isArray(chartData.planets)) {
-    res.status(400).json({ error: 'chartData.planets array required' });
-    return false;
-  }
-  return true;
+  return result.data;
 }
 
 // ── Error helper ──────────────────────────────────────────────
-// FIX: Added err.stack to log so Render.com logs show the actual
+// Added err.stack to log so Render.com logs show the actual
 // crash location instead of just the error message.
 function handleError(res, endpoint, err) {
   console.error(`[/api/template/${endpoint}]`, err.message, '\n', err.stack);
@@ -70,8 +107,9 @@ function handleError(res, endpoint, err) {
 function makeSectionRoute(sectionName, templates, metaBuilder) {
   router.post(`/${sectionName}`, (req, res) => {
     try {
-      const { chartData, lang = 'en' } = req.body;
-      if (!validateChartData(chartData, res)) return;
+      const parsed = validateBody(SectionBodySchema, req.body, res);
+      if (!parsed) return;
+      const { chartData, lang } = parsed;
 
       const context = extractChartContext(chartData);
       const result  = generateSection(templates, context);
@@ -155,26 +193,15 @@ makeSectionRoute('family', familyTemplates, ctx => ({
 // Timeline route has extra dasha timeline data
 router.post('/timeline', (req, res) => {
   try {
-    const { chartData, lang = 'en' } = req.body;
-    if (!validateChartData(chartData, res)) return;
+    const parsed = validateBody(SectionBodySchema, req.body, res);
+    if (!parsed) return;
+    const { chartData, lang } = parsed;
 
     const context = extractChartContext(chartData);
     const result  = generateSection(timelineTemplates, context);
 
     const dashas = chartData.dashaData?.dashas || [];
     const curIdx  = chartData.dashaData?.currentDashaIdx ?? 0;
-
-    const DASHA_THEMES = {
-      Sun:     'Leadership, Father, Authority, Self-expression',
-      Moon:    'Mind, Mother, Home, Emotions, Travel',
-      Mars:    'Energy, Action, Property, Siblings, Courage',
-      Mercury: 'Communication, Business, Skills, Learning',
-      Jupiter: 'Expansion, Wealth, Children, Wisdom, Marriage',
-      Venus:   'Love, Beauty, Art, Luxury, Relationships',
-      Saturn:  'Discipline, Karma, Delay, Transformation, Longevity',
-      Rahu:    'Ambition, Foreign, Technology, Sudden Events',
-      Ketu:    'Spirituality, Liberation, Past Life, Detachment',
-    };
 
     const dashaTimeline = dashas.map((d, i) => ({
       planet:    d.planet,
@@ -210,8 +237,9 @@ router.post('/timeline', (req, res) => {
 // ═══════════════════════════════════════════════════════════════
 router.post('/full-analysis', (req, res) => {
   try {
-    const { chartData, lang = 'en', sections } = req.body;
-    if (!validateChartData(chartData, res)) return;
+    const parsed = validateBody(FullAnalysisBodySchema, req.body, res);
+    if (!parsed) return;
+    const { chartData, lang, sections } = parsed;
 
     const context   = extractChartContext(chartData);
     const toInclude = Array.isArray(sections) ? sections.filter(s => TEMPLATE_MAP[s]) : ALL_SECTIONS;

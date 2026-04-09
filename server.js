@@ -32,10 +32,13 @@ app.use(cors({
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
 }));
 
+// Trust the first proxy hop (Render / Heroku / Nginx) so req.ip reflects the
+// real client IP rather than the load-balancer address — required for accurate
+// rate-limiting via express-rate-limit.
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '10kb' }));
 
