@@ -1194,10 +1194,18 @@ function detectDoshas(planets, ascIdx) {
   const isPitru = (sun.signIdx === rahu.signIdx) || (sun.signIdx === ketu.signIdx);
 
   // ── Sade Sati quick check ───────────────────────────────────
-  // Saturn within 1 sign of natal Moon (houses 12, 1, 2 from Moon sign)
+  // Compare TODAY's transiting Saturn (not natal) to natal Moon sign
   let isSadeSati = false;
+  let transitSaturnSign = saturn.sign; // fallback to natal for display
   if(moon) {
-    const satMoonDiff = ((saturn.signIdx - moon.signIdx) + 12) % 12;
+    const todayJD = (new Date().getTime() / 86400000) + 2440587.5;
+    const todayT  = (todayJD - 2451545.0) / 36525;
+    const todayAyanamsa = 23.85 + (todayJD - 2451545.0) * (50.3 / 3600 / 365.25);
+    const satTropToday  = ((50.0774 + 1222.4937 * todayT) % 360 + 360) % 360;
+    const satSiderealToday = ((satTropToday - todayAyanamsa) % 360 + 360) % 360;
+    const transitSaturnSignIdx = Math.floor(satSiderealToday / 30) % 12;
+    transitSaturnSign = ZODIACS[transitSaturnSignIdx];
+    const satMoonDiff = ((transitSaturnSignIdx - moon.signIdx) + 12) % 12;
     isSadeSati = [11, 0, 1].includes(satMoonDiff);
   }
 
@@ -1220,8 +1228,8 @@ function detectDoshas(planets, ascIdx) {
        : `Sun (${sun.sign.name}) is not afflicted by nodal conjunction. No Pitru Dosha detected.`},
     {name:'Sade Sati', hi:'साढ़े साती', present:isSadeSati,
      desc: isSadeSati
-       ? `Saturn (${saturn.sign.name}) is transiting within one sign of your natal Moon (${moon ? moon.sign.name : '—'}). Sade Sati is currently active — a period of deep transformation, lessons, and eventual strength.`
-       : `Saturn is not within one sign of your natal Moon. Sade Sati is not currently active.`},
+       ? `Transiting Saturn (${transitSaturnSign.name}) is within one sign of your natal Moon (${moon ? moon.sign.name : '—'}). Sade Sati is currently active — a period of deep transformation, lessons, and eventual strength.`
+       : `Transiting Saturn (${transitSaturnSign.name}) is not within one sign of your natal Moon. Sade Sati is not currently active.`},
   ];
 }
 
@@ -2575,7 +2583,7 @@ function downloadReport() {
 
   const reportHTML = `<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/>
-<title>Kundli Report — ${d.name}</title>
+<title>Kundli Report — ${escapeHtml(d.name)}</title>
 <style>
   body{font-family:Georgia,serif;background:#fff;color:#1a1a2e;margin:0;padding:24px;max-width:800px;margin:0 auto;}
   h1{font-size:2rem;color:#8b6914;text-align:center;border-bottom:2px solid #c9a84c;padding-bottom:16px;}
@@ -2593,7 +2601,7 @@ function downloadReport() {
 </style></head><body>
 <div class="wow">
   <div style="font-size:3rem;margin-bottom:8px;">${d.sunSign?.icon||'☸'}</div>
-  <div class="wow-name">${d.name.toUpperCase()}</div>
+  <div class="wow-name">${escapeHtml(d.name.toUpperCase())}</div>
   <div class="wow-sub">${isHi?'जन्म कुंडली':'Janma Kundli'} · ${new Date(d.dob).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}${d.time?' · '+d.time:''}</div>
   <div class="pills" style="justify-content:center;margin-top:12px;">
     <span class="pill">${isHi?'सूर्य':'Sun'}: ${d.sunSign?.name}</span>
@@ -2854,23 +2862,78 @@ function initPanchang() {
   const VARAS = ['Ravivara ☀️','Somvara 🌙','Mangalvara ♂','Budhvara ☿','Guruvara ♃','Shukravara ♀','Shanivara ♄'];
   const vara = VARAS[today.getDay()];
 
-  // Rahu Kaal — calculated from approximate sunrise (6 AM ± ~30 min for India).
-  // Sunrise fraction of day by weekday, then 8 equal parts. Rahu = part per weekday rule.
-  // Weekday order Sun=1,Mon=2,Tue=3,Wed=4,Thu=5,Fri=6,Sat=7
+  // ── Dynamic Sunrise/Sunset ────────────────────────────────────
+  // Use user's birth location (lat/lng from chartDataFull) if available,
+  // otherwise default to IST (lat 23°N, lng 80°E as central India).
+  const userLat = (typeof chartDataFull !== 'undefined' && chartDataFull?.lat) ? chartDataFull.lat : 23.0;
+  const userLng = (typeof chartDataFull !== 'undefined' && chartDataFull?.lng) ? chartDataFull.lng : 80.0;
+
+  // Calculate sunrise/sunset using NOAA simplified solar algorithm.
+  // Returns times in minutes from local midnight.
+  function calcSunriseSunset(lat, lng, date) {
+    const jd = (date.getTime() / 86400000) + 2440587.5;
+    const tc = (jd - 2451545.0) / 36525;
+    const L0 = (280.46646 + 36000.76983 * tc) % 360;
+    const Mrad = ((357.52911 + 35999.05029 * tc) % 360) * Math.PI / 180;
+    const C = (1.9146 - 0.004817 * tc) * Math.sin(Mrad)
+            + 0.019993 * Math.sin(2 * Mrad)
+            + 0.00029  * Math.sin(3 * Mrad);
+    const lambda = (L0 + C - 0.00569 - 0.00478 * Math.sin((125.04 - 1934.136 * tc) * Math.PI / 180)) * Math.PI / 180;
+    const epsilon = (23.439 - 0.013 * tc) * Math.PI / 180;
+    const decl = Math.asin(Math.sin(epsilon) * Math.sin(lambda));
+    // Equation of time (minutes)
+    const eL = L0 * Math.PI / 180;
+    const y  = Math.tan(epsilon / 2) ** 2;
+    const e  = 0.016708634;
+    const eot = 4 * (y * Math.sin(2 * eL) - 2 * e * Math.sin(Mrad)
+              + 4 * e * y * Math.sin(Mrad) * Math.cos(2 * eL)
+              - 0.5 * y * y * Math.sin(4 * eL)
+              - 1.25 * e * e * Math.sin(2 * Mrad)) * (180 / Math.PI);
+    // Solar noon in minutes from UTC midnight
+    const solarNoonUTC = 720 - 4 * lng - eot;
+    // Hour angle for sunrise/sunset (standard horizon 90.833°)
+    const latRad = lat * Math.PI / 180;
+    const cosH = (Math.cos(90.833 * Math.PI / 180) - Math.sin(latRad) * Math.sin(decl))
+               / (Math.cos(latRad) * Math.cos(decl));
+    if (Math.abs(cosH) > 1) {
+      return { sunriseMin: 6 * 60, sunsetMin: 18 * 60 }; // polar edge case
+    }
+    const H = Math.acos(cosH) * 180 / Math.PI;
+    const tzOffset = date.getTimezoneOffset(); // minutes behind UTC (negative = ahead)
+    const sunriseLocal = ((solarNoonUTC - 4 * H - tzOffset) % 1440 + 1440) % 1440;
+    const sunsetLocal  = ((solarNoonUTC + 4 * H - tzOffset) % 1440 + 1440) % 1440;
+    return { sunriseMin: sunriseLocal, sunsetMin: sunsetLocal };
+  }
+
+  const { sunriseMin, sunsetMin } = calcSunriseSunset(userLat, userLng, today);
+  const dayDurationMin = sunsetMin - sunriseMin;
+
+  // Rahu Kaal — weekday-based fraction of the daytime (8 equal parts)
   // Rahu Kaal part: Sun=8,Mon=2,Tue=7,Wed=5,Thu=6,Fri=4,Sat=3
   const RAHU_PART = [8, 2, 7, 5, 6, 4, 3]; // index 0=Sun...6=Sat
   const rahuPart = RAHU_PART[today.getDay()];
-  // Approximate sunrise 6:00, sunset 18:00 → 12hr day / 8 parts = 90 min each
-  const sunriseMin = 6 * 60; // 6:00 AM in minutes
-  const dayDurationMin = 12 * 60; // 12 hour day
   const rahuStartMin = sunriseMin + (rahuPart - 1) * (dayDurationMin / 8);
   const rahuEndMin   = rahuStartMin + (dayDurationMin / 8);
-  const fmtMin = m => `${Math.floor(m/60)}:${String(m%60).padStart(2,'0')} ${m < 720 ? 'AM' : 'PM'}`.replace(/^(\d+):/, h => ((+h.split(':')[0]-1)%12+1)+':');
-  const rahuKaal = `${fmtMin(rahuStartMin)} – ${fmtMin(rahuEndMin)} (IST approx.)`;
+  const fmtMin = m => { const h=Math.floor(((m%1440)+1440)%1440/60),mn=Math.round(((m%1440)+1440)%1440%60),ampm=h>=12?'PM':'AM',h12=h%12||12; return `${h12}:${String(mn).padStart(2,'0')} ${ampm}`; };
+  const rahuKaal = `${fmtMin(rahuStartMin)} – ${fmtMin(rahuEndMin)}`;
 
-  // Brahma Muhurta — 96 min before sunrise (~4:24 AM) and 48 min duration
+  // Brahma Muhurta — 96 min before sunrise, 48 min duration
   const brahmaStartMin = sunriseMin - 96;
   const brahmaEndMin   = sunriseMin - 48;
+
+  // Abhijit Muhurta — solar noon ±24 minutes (48-min window centred on midday)
+  const solarNoonMin  = sunriseMin + dayDurationMin / 2;
+  const abhijitStart  = solarNoonMin - 24;
+  const abhijitEnd    = solarNoonMin + 24;
+
+  // Vijaya Muhurta — 8th of 15 equal muhurtas between sunrise and sunset
+  const muhurtaLen    = dayDurationMin / 15;
+  const vijayaStart   = sunriseMin + 7 * muhurtaLen;
+  const vijayaEnd     = vijayaStart + muhurtaLen;
+
+  // Godhuli Lagna — 24 min before sunset to 24 min after sunset
+  const godhuliStart  = sunsetMin - 24;
+  const godhuliEnd    = sunsetMin + 24;
 
   // Sade Sati check (Saturn sidereal sign)
   const satTrop = ((50.0774 + 1222.4937*T)%360+360)%360;
@@ -2878,7 +2941,12 @@ function initPanchang() {
   const satSignIdx = Math.floor(satL/30)%12;
 
   const MUHURAT_NAMES = ['Brahma Muhurta','Abhijit Muhurta','Vijaya Muhurta','Godhuli Lagna'];
-  const MUHURAT_TIMES = [`${fmtMin(brahmaStartMin)}–${fmtMin(brahmaEndMin)}`,'11:52 AM–12:40 PM','2:16–3:04 PM','6:00–6:24 PM'];
+  const MUHURAT_TIMES = [
+    `${fmtMin(brahmaStartMin)}–${fmtMin(brahmaEndMin)}`,
+    `${fmtMin(abhijitStart)}–${fmtMin(abhijitEnd)}`,
+    `${fmtMin(vijayaStart)}–${fmtMin(vijayaEnd)}`,
+    `${fmtMin(godhuliStart)}–${fmtMin(godhuliEnd)}`,
+  ];
 
   document.getElementById('panchaContent').innerHTML = `
     <div class="panchang-grid">
@@ -2893,7 +2961,7 @@ function initPanchang() {
     <div class="sec-card" style="margin-bottom:16px;">
       <div class="sec-header"><span class="sec-ico">⛔</span><span class="sec-title">RAHU KAAL — Avoid Important Work</span></div>
       <div class="sec-body">
-        <div class="rahu-kaal-bar">⚠️ Aaj ka Rahu Kaal: ${rahuKaal} (IST)</div>
+        <div class="rahu-kaal-bar">⚠️ Aaj ka Rahu Kaal: ${rahuKaal}</div>
         <p style="font-size:0.82rem;color:var(--muted);margin-top:12px;line-height:1.7;">Rahu Kaal mein koi bhi naya kaam, safar ya muhurat shuru nahi karna chahiye. Yeh period har din lagbhag 90 minutes ka hota hai.</p>
       </div>
     </div>
@@ -3179,7 +3247,7 @@ function showAstroRoast() {
 
   document.getElementById('roastContent').innerHTML = `
     <div class="roast-box">
-      <div style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:3px;color:#f87171;margin-bottom:20px;text-align:center;">🎤 AI ROAST SESSION — ${(d.name||'').toUpperCase()}</div>
+      <div style="font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:3px;color:#f87171;margin-bottom:20px;text-align:center;">🎤 AI ROAST SESSION — ${escapeHtml((d.name||'').toUpperCase())}</div>
       <div class="roast-line">🌟 ${sunRoasts[sn] || `${sn} sun wale interesting hote hain!`}</div>
       <div class="roast-line">🌙 Moon ${mn} mein hai — matlab emotions ka ek poora Netflix series hai andar.</div>
       ${lagnaRoast ? `<div class="roast-line">👁️ ${lagnaRoast}</div>` : ''}
@@ -3289,10 +3357,14 @@ function shareCapsule() {
 // SADE SATI CALCULATOR
 // ══════════════════════════════════════════════════════
 function calcSadeSati(moonSignIdx, planets) {
-  const saturn = planets?.find(p=>p.name==='Saturn');
-  if(!saturn) return {active:false};
-  const satIdx = saturn.signIdx;
-  // Sade Sati = Saturn in 12th, 1st, or 2nd from Moon sign
+  // Use today's transiting Saturn (not natal) to compare against natal Moon sign
+  const todayJD = (new Date().getTime() / 86400000) + 2440587.5;
+  const todayT  = (todayJD - 2451545.0) / 36525;
+  const todayAyanamsa = 23.85 + (todayJD - 2451545.0) * (50.3 / 3600 / 365.25);
+  const satTropToday  = ((50.0774 + 1222.4937 * todayT) % 360 + 360) % 360;
+  const satSidereal   = ((satTropToday - todayAyanamsa) % 360 + 360) % 360;
+  const satIdx        = Math.floor(satSidereal / 30) % 12;
+  // Sade Sati = transiting Saturn in 12th, 1st, or 2nd from natal Moon sign
   const diff = ((satIdx - moonSignIdx + 12) % 12);
   const inSadeSati = diff === 11 || diff === 0 || diff === 1;
   const phase = diff===11?'Rising (Shuruat)':diff===0?'Peak (Madhya)':diff===1?'Setting (Ant)':'Not Active';
@@ -3864,11 +3936,17 @@ function showComparePage(){
 
 // ══ SADE SATI CALC ══
 function calcSadeSati(moonSignIdx,planets){
-  const saturn=planets?.find(p=>p.name==='Saturn');if(!saturn)return{active:false};
-  const diff=((saturn.signIdx-moonSignIdx+12)%12);
+  // Use today's transiting Saturn (not natal) to compare against natal Moon sign
+  const todayJD=(new Date().getTime()/86400000)+2440587.5;
+  const todayT=(todayJD-2451545.0)/36525;
+  const todayAyanamsa=23.85+(todayJD-2451545.0)*(50.3/3600/365.25);
+  const satTrop=((50.0774+1222.4937*todayT)%360+360)%360;
+  const satSidereal=((satTrop-todayAyanamsa)%360+360)%360;
+  const satIdx=Math.floor(satSidereal/30)%12;
+  const diff=((satIdx-moonSignIdx+12)%12);
   const active=diff===11||diff===0||diff===1;
   const phase=diff===11?'Rising (Shuruat)':diff===0?'Peak (Madhya)':diff===1?'Setting (Ant)':'Not Active';
-  return{active,phase,saturnSign:ZODIACS[saturn.signIdx]};
+  return{active,phase,saturnSign:ZODIACS[satIdx]};
 }
 
 // ══ RESULT PAGE INJECTION ══
@@ -4376,7 +4454,7 @@ function runGunaMilan() {
       <div style="max-width:300px;margin:12px auto 0;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">
         <div style="height:100%;width:${gm.pct}%;background:linear-gradient(90deg,${color},${color}99);border-radius:3px;transition:width 1.5s ease;"></div>
       </div>
-      <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;">${d.name} ❤️ ${name2}</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin-top:8px;">${escapeHtml(d.name)} ❤️ ${escapeHtml(name2)}</div>
     </div>
     <div style="font-family:'Cinzel',serif;font-size:0.62rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;">ASHTA KOOT BREAKDOWN</div>
     ${gm.results.map(k=>`
