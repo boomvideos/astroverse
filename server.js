@@ -8,6 +8,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import 'dotenv/config';
 
+// ── Database ─────────────────────────────────────────────────
+import connectDB from './src/config/db.js';
+
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
 import templateRouter from './template-routes.js';
@@ -56,6 +59,9 @@ app.get('/api/health', (req, res) => {
 });
 
 // ── Graceful shutdown ─────────────────────────────────────────
+// Initialise DB connection (non-fatal if MONGODB_URI is not set)
+connectDB();
+
 const server = app.listen(PORT, () => {
   console.log(`\n✅  AstroVerse Backend running on port ${PORT}`);
   console.log(`    Mode    : Template-only (no AI, no auth)`);
