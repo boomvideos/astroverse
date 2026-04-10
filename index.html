@@ -1132,11 +1132,35 @@ function detectDoshas(planets, ascIdx) {
   // ── Helper: true house number 1–12 from Lagna ──────────────
   const houseOf = (p) => ((p.signIdx - ascIdx + 12) % 12) + 1;
 
-  // ── Manglik Dosha ───────────────────────────────────────────
-  // Mars in house 1, 2, 4, 7, 8, or 12 from Lagna
+  // ── Manglik Dosha (FIXED — teeno taraf se check) ────────────
+  // Traditional Vedic rule: Mars Manglik tab hai jab woh
+  // house 1, 2, 4, 7, 8, ya 12 mein ho — teen jagah se:
+  //   1. Lagna se (ascendant)  — sabse strong check
+  //   2. Moon se               — emotional relationships affect
+  //   3. Venus se              — love/marriage affect
+  // Teen mein se koi ek bhi ho toh Manglik maana jaata hai.
   const MANGLIK_HOUSES = [1, 2, 4, 7, 8, 12];
   const marsHouse = houseOf(mars);
-  const isManglik = MANGLIK_HOUSES.includes(marsHouse);
+
+  // Check 1: Lagna se Mars
+  const manglikFromLagna = MANGLIK_HOUSES.includes(marsHouse);
+
+  // Check 2: Moon se Mars
+  const manglikFromMoon = moon
+    ? MANGLIK_HOUSES.includes(((mars.signIdx - moon.signIdx + 12) % 12) + 1)
+    : false;
+
+  // Check 3: Venus se Mars
+  const venus = planets.find(p => p.name === 'Venus');
+  const manglikFromVenus = venus
+    ? MANGLIK_HOUSES.includes(((mars.signIdx - venus.signIdx + 12) % 12) + 1)
+    : false;
+
+  const isManglik = manglikFromLagna || manglikFromMoon || manglikFromVenus;
+
+  // Manglik level — kitna strong hai
+  const manglikScore = [manglikFromLagna, manglikFromMoon, manglikFromVenus].filter(Boolean).length;
+  const manglikLevel = manglikScore === 3 ? 'strong' : manglikScore === 2 ? 'moderate' : manglikScore === 1 ? 'mild' : 'none';
 
   // ── Kaal Sarp Dosha ─────────────────────────────────────────
   // All 7 planets (Sun–Saturn) must lie within the Rahu→Ketu arc
@@ -1180,8 +1204,8 @@ function detectDoshas(planets, ascIdx) {
   return [
     {name:'Manglik Dosha', hi:'मांगलिक दोष', present:isManglik,
      desc: isManglik
-       ? `Mars (${mars.sign.name} ${mars.degree}°) is in House ${marsHouse} — a Manglik house. This can bring intensity in relationships and may delay marriage. Specific remedies are recommended.`
-       : `Mars is in House ${marsHouse} (${mars.sign.name}) — not a Manglik position. No Manglik Dosha detected.`},
+       ? `मांगलिक दोष present है — ${manglikLevel === 'strong' ? 'तीनों' : manglikScore === 2 ? 'दो' : 'एक'} जगह से (लग्न${manglikFromLagna?'✓':'✗'}, चंद्र${manglikFromMoon?'✓':'✗'}, शुक्र${manglikFromVenus?'✓':'✗'})। मंगल ${mars.sign.name} में ${marsHouse}वें घर में है। ${manglikLevel === 'mild' ? 'हल्का दोष है — घबराने की जरूरत नहीं।' : manglikLevel === 'moderate' ? 'मध्यम दोष है — उपाय करना लाभदायक होगा।' : 'प्रबल दोष है — योग्य ज्योतिषी से उपाय अवश्य करें।'}`
+       : `मांगलिक दोष नहीं है। मंगल ${mars.sign.name} में ${marsHouse}वें घर में है — तीनों जगह (लग्न, चंद्र, शुक्र) से कोई मांगलिक स्थिति नहीं है।`},
     {name:'Kaal Sarp Dosha', hi:'काल सर्प दोष', present:allBetween,
      desc: allBetween
        ? `All planets lie within the Rahu–Ketu axis. ${kaalSarpType} Kaal Sarp Dosha is present (Rahu in H${rahuHouse}). This may cause delays and karmic challenges that resolve with persistent effort.`
