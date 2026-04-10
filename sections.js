@@ -626,7 +626,7 @@ Overall constitution strong रहती है।`,
 • Integrative medicine approach beneficial होगा`,
     },
     en: {
-      title: '🛡️ Jupiter's Protection — Protected Constitution',
+     title: "🛡️ Jupiter's Protection — Protected Constitution",
       description: `{name}, Jupiter's connection with the 6th or 8th house creates a powerful health protection.
 
 ✨ Your health strengths —
