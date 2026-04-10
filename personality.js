@@ -1,14 +1,7 @@
 // ═══════════════════════════════════════════════════════════════
-// AstroVerse — Personality Templates
-// templates/personality.js
-//
-// Conditions priority (high → low):
-//   1. Lagna (Ascendant sign) — sabse strong personality indicator
-//   2. Sun sign + element
-//   3. Moon sign (inner nature)
-//   4. Special yogas (Gaj Kesari, Budhaditya, etc.)
-//   5. Saturn/Mars house positions
-//   6. Default fallback
+// AstroVerse — Personality Templates  (Bilingual v3)
+// Har template mein dono hain: hi{} aur en{}
+// engine.js ka fillTemplate() lang ke hisaab se sahi version pick karta hai
 // ═══════════════════════════════════════════════════════════════
 
 export const personalityTemplates = [
@@ -17,144 +10,492 @@ export const personalityTemplates = [
   {
     id: 'aries_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Aries',
-    ],
-    title: 'The Dynamic Pioneer — {ascSign} Ascendant',
-    description: `{name}, aapka {ascSign} Lagna aapko ek aise vyakti banata hai jisme janm se hi netatv ki shakti hai. Aap har kaam mein sabse pehle kadam uthate hain — bina zyada soche, seedha action mein aa jaate hain. Aapki personality mein ek magnetic energy hai jo logo ko attract karti hai, aur aap natural taur par doosron ko inspire karne ki kabiliyat rakhte hain. Mangal, jo aapka Lagna Lord hai, aapko ek fighter ki taasir deta hai — obstacles se girte nahi, balki unhe challenge samajh kar todte hain. Aapka {sunSign} Sun aur {moonSign} Moon aapki is fire energy ko aur sharpen karta hai. Kabhi kabhi aap thoda impatient ho jaate hain, lekin yahi speed aapki sabse badi strength bhi hai. Life mein aap woh log hain jo dusron ke sapnon ko reality banaate hain — pehle khud ke liye, phir apne circle ke liye. Aapke andar ek daring quality hai jo rarely milti hai.`,
-    advice: `Apni impulsiveness ko discipline se balance karo. Roz subah 10 minute meditation aur ek specific goal set karo din ke liye. Mangal ki energy best results tab deti hai jab direction clear ho.`,
+    conditions: [ ctx => ctx.ascSign === 'Aries' ],
+    hi: {
+      title: '🔥 मेष लग्न — जन्मजात योद्धा',
+      description: `{name}, आपका मेष लग्न आपको एक ऐसी शक्ति देता है जो बहुत कम लोगों में होती है।
+
+✨ आपकी खासियतें —
+• आप किसी भी काम में सबसे पहले कदम उठाते हैं — बिना ज़्यादा सोचे, सीधे एक्शन में
+• कोई भी बाधा आए, आप उसे चुनौती समझकर तोड़ते हैं — हार मानना आपकी फ़ितरत नहीं
+• लोग आपकी energy से naturally attract होते हैं — आप inspire करते हैं, डराते नहीं
+• मंगल आपका लग्नेश है — यही आपको एक fighter की तासीर देता है
+
+🌟 आपका व्यक्तित्व —
+आपका {sunSign} सूर्य और {moonSign} चंद्र मिलकर आपकी fire energy को और पैना करते हैं। आप उन लोगों में से हैं जो दूसरों के सपनों को भी reality बनाते हैं।`,
+      advice: `💡 आपके लिए सुझाव —
+• रोज़ सुबह 10 मिनट meditation करें और दिन का एक specific goal तय करें
+• अपनी impulsiveness को discipline से balance करें
+• मंगल की energy तब best results देती है जब direction एकदम clear हो`,
+    },
+    en: {
+      title: '🔥 Aries Ascendant — Born Warrior',
+      description: `{name}, your Aries Ascendant gives you a rare and powerful energy that few people possess.
+
+✨ Your strengths —
+• You take the first step in any situation — no overthinking, straight to action
+• No obstacle can stop you — you see challenges as things to break, not reasons to quit
+• People are naturally drawn to your energy — you inspire, not intimidate
+• Mars is your Lagna Lord — it gives you the spirit of a true fighter
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon sharpen your fire energy further. You are the kind of person who turns other people's dreams into reality — starting with your own.`,
+      advice: `💡 Advice for you —
+• Meditate 10 minutes every morning and set one specific goal for the day
+• Balance your impulsiveness with discipline
+• Mars energy gives best results when your direction is crystal clear`,
+    },
   },
 
   // ── TAURUS LAGNA ─────────────────────────────────────────────
   {
     id: 'taurus_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Taurus',
-    ],
-    title: 'The Steadfast Builder — {ascSign} Ascendant',
-    description: `{name}, aapka {ascSign} Lagna aapko ek aisi solid aur reliable personality deta hai jo mushkil waqt mein bhi nahi hilti. Shukra, jo aapke Lagna Prabhu hain, aapko ek refined taste dete hain — aap art, music, ya kisi bhi beautiful cheez ke liye naturally draw hote hain. Aapki sabse badi strength hai aapki patience — jab baki sab log give up kar dete hain, tum wahan khade rehte ho aur ultimately jeet jaate ho. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek deep emotional grounding deta hai jo dusron ko stability aur safety feel karata hai. Aap loyal hain, trustworthy hain, aur jab aap kisi se committed ho jaate hain toh life bhar ke liye. Aapka Taurus Lagna aapko financial matters mein bhi ek intuitive edge deta hai — paise ki value aur investment ki samajh naturally aati hai aapko. Kabhi kabhi aap change se darte hain, lekin yahi consistency aapko long term success dilati hai.`,
-    advice: `Change ko enemy mat samjho — growth ke liye zaruri hai. Jab bhi kuch naya karne se darna ho, apne aap se poochho: "Kya yeh meri real value hai ya sirf comfort zone?" Shukra ki grace tab milti hai jab tum growth mein beauty dhundho.`,
+    conditions: [ ctx => ctx.ascSign === 'Taurus' ],
+    hi: {
+      title: '🌿 वृषभ लग्न — अटल निर्माता',
+      description: `{name}, आपका वृषभ लग्न आपको एक ऐसी solid और reliable personality देता है जो मुश्किल वक्त में भी नहीं हिलती।
+
+✨ आपकी खासियतें —
+• शुक्र आपके लग्नेश हैं — art, music और beauty की ओर naturally खिंचाव है
+• आपकी सबसे बड़ी ताकत है आपका patience — जब बाकी सब छोड़ देते हैं, आप खड़े रहते हो
+• आप loyal हैं, trustworthy हैं — एक बार committed हो जाते हैं तो life भर के लिए
+• पैसे की value और investment की समझ naturally आती है आपको
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको एक deep emotional grounding देता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Change को दुश्मन मत समझो — growth के लिए ज़रूरी है
+• जब भी कुछ नया करने से डर लगे पूछो: "क्या यह मेरी real value है या सिर्फ comfort zone?"
+• शुक्र की कृपा तब मिलती है जब आप growth में भी beauty ढूंढते हो`,
+    },
+    en: {
+      title: '🌿 Taurus Ascendant — The Unshakeable Builder',
+      description: `{name}, your Taurus Ascendant gives you a solid and reliable personality that doesn't waver even in tough times.
+
+✨ Your strengths —
+• Venus is your Lagna Lord — you have a natural pull toward art, music, and beauty
+• Your greatest strength is patience — when everyone else gives up, you stay standing
+• You are loyal and trustworthy — once committed, it's for life
+• You have a natural instinct for money's value and smart investment
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon give you a deep emotional grounding that makes others feel stable and safe around you.`,
+      advice: `💡 Advice for you —
+• Don't treat change as your enemy — it's essential for growth
+• When something new feels scary, ask: "Is this my real value or just my comfort zone?"
+• Venus's grace comes when you find beauty even in growth`,
+    },
   },
 
   // ── GEMINI LAGNA ─────────────────────────────────────────────
   {
     id: 'gemini_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Gemini',
-    ],
-    title: 'The Versatile Communicator — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisa mind deta hai jo ek jagah tik hi nahi sakta — aur yeh koi weakness nahi, yeh aapki superpower hai. Budh, jo aapke Lagna Prabhu hain, aapko ek exceptional communicator banate hain. Aap bolte hain toh log sun'te hain, likhte hain toh log padhte hain. Aapki curiosity aur learning speed almost kisi bhi topic mein aapko expert bana sakti hai. {sunSign} Sun ke combination se aapki personality mein ek youthful energy hoti hai jo umra ke saath bhi nahi jaati. Aap doosron ke perspective ko genuinely samajh paate hain — yahi quality aapko ek behtareen mediator, teacher, ya business partner banati hai. Dual nature hoti hai Gemini mein — ek taraf analytical mind, doosri taraf artistic soul. Dono mein balance rakho toh life mein success guaranteed hai. Aapka {moonSign} Moon aapki emotional depth deta hai jo upar se nahi dikhti, andar se mehsoos hoti hai.`,
-    advice: `Ek time pe ek cheez pe focus karo — aapki energy scatter hoti hai bahut. Daily journaling shuru karo, aur monthly ek new skill seekhna band karo jab tak pichhli skill 80% master na ho jaye.`,
+    conditions: [ ctx => ctx.ascSign === 'Gemini' ],
+    hi: {
+      title: '💨 मिथुन लग्न — बहुमुखी संचारक',
+      description: `{name}, मिथुन लग्न आपको एक ऐसा mind देता है जो एक जगह टिक ही नहीं सकता — और यह कोई कमज़ोरी नहीं, यह आपकी superpower है।
+
+✨ आपकी खासियतें —
+• बुध आपके लग्नेश हैं — आप एक exceptional communicator हैं
+• किसी भी topic में learning speed almost extraordinary है
+• दोनों sides को genuinely समझ पाते हैं — mediator, teacher, business partner के रूप में बेजोड़
+• Gemini की dual nature: एक तरफ analytical mind, दूसरी तरफ artistic soul
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य के combination से आपकी personality में एक youthful energy होती है जो उम्र के साथ भी नहीं जाती।`,
+      advice: `💡 आपके लिए सुझाव —
+• एक time पर एक चीज़ पर focus करो — energy scatter होती है बहुत
+• Daily journaling शुरू करो
+• Monthly एक नई skill सीखना बंद करो जब तक पिछली skill 80% master न हो जाए`,
+    },
+    en: {
+      title: '💨 Gemini Ascendant — The Versatile Communicator',
+      description: `{name}, your Gemini Ascendant gives you a mind that simply cannot stay in one place — and that's not a weakness, it's your superpower.
+
+✨ Your strengths —
+• Mercury is your Lagna Lord — you are an exceptional communicator
+• Your learning speed in any topic is almost extraordinary
+• You can genuinely understand both sides — you're a natural mediator, teacher, and business partner
+• Gemini's dual nature: analytical mind on one side, artistic soul on the other
+
+🌟 Your personality —
+Your {sunSign} Sun gives your personality a youthful energy that doesn't fade with age.`,
+      advice: `💡 Advice for you —
+• Focus on one thing at a time — your energy tends to scatter
+• Start daily journaling
+• Stop learning a new skill every month until the previous one is 80% mastered`,
+    },
   },
 
   // ── CANCER LAGNA ─────────────────────────────────────────────
   {
     id: 'cancer_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Cancer',
-    ],
-    title: 'The Nurturing Protector — {ascSign} Ascendant',
-    description: `{name}, aapka {ascSign} Lagna aapko duniya ke sabse empathetic logon mein se ek banata hai. Chandra, jo aapke Lagna Prabhu hain, aapko ek deep intuition dete hain — aap bina bataye log ka dard feel kar lete hain. Yeh sensitivity aapki sabse badi gift hai. Aap jis bhi circle mein hote hain, wahan emotional anchor ban jaate hain — ghar ho, office ho, ya dost ka group. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek strong domestic instinct deta hai. Aapko deep connections chahiye — surface level relationships se satisfy nahi hote. Creativity bhi naturally aati hai Cancer Lagna mein — art, cooking, music, writing — kuch na kuch form mein expression zaroori hai aapke liye warna aap restless feel karte hain. Aapki memory exceptionally strong hoti hai, especially emotions se related memories — kabhi bhool nahi paate. Aapka intuition almost psychic level ka hota hai — trust karo use, rarely wrong hoga.`,
-    advice: `Apni emotional boundaries protect karo — sabka dard absorb karne ki zarurat nahi. Meditation aur moon cycle tracking shuru karo. Purnima ke din reflection karo: "Kahan main overgiving kar raha/rahi hoon?"`,
+    conditions: [ ctx => ctx.ascSign === 'Cancer' ],
+    hi: {
+      title: '🌙 कर्क लग्न — भावनाओं का रक्षक',
+      description: `{name}, आपका कर्क लग्न आपको दुनिया के सबसे empathetic लोगों में से एक बनाता है।
+
+✨ आपकी खासियतें —
+• चंद्र आपके लग्नेश हैं — बिना बताए लोगों का दर्द feel कर लेते हैं
+• आप जिस भी circle में होते हैं, वहाँ emotional anchor बन जाते हैं
+• Memory exceptionally strong है — especially emotions से जुड़ी यादें
+• Intuition almost psychic level की है — उस पर trust करो, rarely wrong होता है
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको एक strong domestic instinct देता है। Art, cooking, music, writing — कुछ न कुछ creative expression ज़रूरी है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Emotional boundaries protect करो — सबका दर्द absorb करने की ज़रूरत नहीं
+• Meditation और moon cycle tracking शुरू करो
+• पूर्णिमा के दिन reflection करो: "कहाँ मैं overgiving कर रहा/रही हूँ?"`,
+    },
+    en: {
+      title: '🌙 Cancer Ascendant — The Emotional Guardian',
+      description: `{name}, your Cancer Ascendant makes you one of the most empathetic people in the world.
+
+✨ Your strengths —
+• The Moon is your Lagna Lord — you feel people's pain before they even say a word
+• Wherever you go, you become the emotional anchor of the group
+• Your memory is exceptionally strong — especially emotional memories
+• Your intuition is almost psychic — trust it, it's rarely wrong
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon give you a strong domestic instinct. Art, cooking, music, writing — some form of creative expression is essential for you.`,
+      advice: `💡 Advice for you —
+• Protect your emotional boundaries — you don't need to absorb everyone's pain
+• Start meditation and track moon cycles
+• On full moon nights, reflect: "Where am I overgiving?"`,
+    },
   },
 
   // ── LEO LAGNA ────────────────────────────────────────────────
   {
     id: 'leo_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Leo',
-    ],
-    title: 'The Royal Leader — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek natural royalty deta hai — jab aap room mein enter karte hain, log notice karte hain. Surya, jo aapke Lagna Prabhu hain, aapko ek charisma dete hain jo artificial nahi ho sakta — yeh born hai. Aap leadership mein naturally comfortable hote hain, aur jo log aapko follow karte hain unhe genuinely inspire karte hain, manipulate nahi. {sunSign} Sun ka combination Leo Lagna ke saath aapko double solar energy deta hai — confidence, dignity, aur a deep sense of self. Aapki generosity exceptional hai — dil khol ke dete hain chahe apne paas kam ho. Aap recognition chahte hain, aur yeh koi ego issue nahi — yeh healthy self-worth hai. Jab koi aapki mehnat appreciate nahi karta toh truly hurt hote hain, aur yeh understand karna important hai khud ke liye bhi aur doosron ke liye bhi. Aapka {moonSign} Moon aapko depth deta hai jo aapki Leo persona ke andar chhupi rehti hai.`,
-    advice: `Apne inner child ko regularly nurture karo — play, creativity, aur pure joy aapke liye medicine hai. Praise ka hunger thoda kam karo aur self-validation build karo. Jab aap khud se satisfied ho, bahar ka recognition bonus ban jaata hai.`,
+    conditions: [ ctx => ctx.ascSign === 'Leo' ],
+    hi: {
+      title: '👑 सिंह लग्न — जन्मजात नेता',
+      description: `{name}, सिंह लग्न आपको एक natural royalty देता है — जब आप room में enter करते हैं, लोग notice करते हैं।
+
+✨ आपकी खासियतें —
+• सूर्य आपके लग्नेश हैं — एक ऐसा charisma जो artificial नहीं हो सकता
+• Leadership में naturally comfortable हैं — inspire करते हैं, manipulate नहीं
+• Generosity exceptional है — दिल खोलकर देते हैं चाहे अपने पास कम हो
+• Recognition चाहते हैं — और यह कोई ego issue नहीं, यह healthy self-worth है
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य का combination Leo Lagna के साथ आपको double solar energy देता है। {moonSign} चंद्र वो depth देता है जो आपकी Leo persona के अंदर छुपी रहती है।`,
+      advice: `💡 आपके लिए सुझाव —
+• अपने inner child को regularly nurture करो — play, creativity और pure joy medicine है
+• Praise का hunger थोड़ा कम करो और self-validation build करो
+• जब आप खुद से satisfied हों, बाहर का recognition bonus बन जाता है`,
+    },
+    en: {
+      title: '👑 Leo Ascendant — Born to Lead',
+      description: `{name}, your Leo Ascendant gives you a natural royalty — when you walk into a room, people notice.
+
+✨ Your strengths —
+• The Sun is your Lagna Lord — a charisma that cannot be faked, it's born
+• You are naturally comfortable in leadership — you inspire, not manipulate
+• Your generosity is exceptional — you give with an open heart even when you have less
+• You want recognition — and that's not ego, it's healthy self-worth
+
+🌟 Your personality —
+Your {sunSign} Sun combined with Leo Ascendant gives you double solar energy. Your {moonSign} Moon gives you a hidden depth inside your Leo persona.`,
+      advice: `💡 Advice for you —
+• Nurture your inner child regularly — play, creativity, and pure joy are your medicine
+• Reduce your hunger for external praise and build self-validation instead
+• When you're satisfied with yourself, outside recognition becomes a bonus`,
+    },
   },
 
   // ── VIRGO LAGNA ──────────────────────────────────────────────
   {
     id: 'virgo_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Virgo',
-    ],
-    title: 'The Meticulous Perfectionist — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek extraordinary attention to detail deta hai jo doosron ko kabhi notice nahi hoti lekin jo every situation mein difference banata hai. Budh, aapke Lagna Prabhu, aapko ek analytical mind dete hain jo patterns dhundhta hai, systems banata hai, aur chaos mein bhi order laata hai. Aap the person in any room who actually reads the fine print — aur usually saves the group from mistakes. {sunSign} Sun ke saath Virgo Lagna ka combination aapko ek practical dreamer banata hai — bade sapne dekhte hain lekin execution plan bana ke chalte hain. Aapki critique honest hai aur doosron ko better banane ke iraade se aati hai, lekin log kabhi kabhi ise negativity samajhte hain — yeh aapka biggest miscommunication point hai. Service ka bhav naturally strong hai — aap genuinely help karna chahte hain. Health matters mein bhi aap naturally aware hote hain. Aapka {moonSign} Moon aapko ek depth of feeling deta hai jo aap rarely express karte hain lekin deeply feel karte hain.`,
-    advice: `"Good enough" ko accept karna seekho — perfection often blocks completion. Ek rule banao: jab koi kaam 85% complete ho, move on karo. Aur apni own mistakes ke saath utna gentle raho jitna doosron ke saath hote ho.`,
+    conditions: [ ctx => ctx.ascSign === 'Virgo' ],
+    hi: {
+      title: '🌾 कन्या लग्न — विश्लेषक और परफेक्शनिस्ट',
+      description: `{name}, कन्या लग्न आपको एक extraordinary attention to detail देता है जो दूसरों को कभी notice नहीं होती।
+
+✨ आपकी खासियतें —
+• बुध आपके लग्नेश हैं — patterns ढूंढना, systems बनाना, chaos में order लाना naturally आता है
+• आप वो इंसान हैं जो actually fine print पढ़ता है — और usually सबको mistakes से बचाता है
+• Service का भाव naturally strong है — genuinely help करना चाहते हैं
+• Critique honest है और दूसरों को better बनाने के इरादे से आती है
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य के साथ कन्या Lagna आपको एक practical dreamer बनाता है। {moonSign} चंद्र एक depth of feeling देता है जो आप rarely express करते हैं।`,
+      advice: `💡 आपके लिए सुझाव —
+• "Good enough" को accept करना सीखो — perfection often blocks completion
+• एक rule बनाओ: जब कोई काम 85% complete हो, move on करो
+• अपनी own mistakes के साथ उतना gentle रहो जितना दूसरों के साथ होते हो`,
+    },
+    en: {
+      title: '🌾 Virgo Ascendant — The Meticulous Perfectionist',
+      description: `{name}, your Virgo Ascendant gives you an extraordinary attention to detail that others simply don't notice.
+
+✨ Your strengths —
+• Mercury is your Lagna Lord — finding patterns, building systems, bringing order to chaos comes naturally
+• You are the person in any room who actually reads the fine print — and usually saves everyone from mistakes
+• Your instinct to serve is deeply genuine — you truly want to help
+• Your critique is honest and comes from a place of wanting others to improve
+
+🌟 Your personality —
+Your {sunSign} Sun with Virgo Ascendant makes you a practical dreamer. Your {moonSign} Moon gives you a depth of feeling that you rarely express but deeply experience.`,
+      advice: `💡 Advice for you —
+• Learn to accept "good enough" — perfectionism often blocks completion
+• Make a rule: when a task is 85% done, move on
+• Be as gentle with your own mistakes as you are with others'`,
+    },
   },
 
   // ── SCORPIO LAGNA ─────────────────────────────────────────────
   {
     id: 'scorpio_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Scorpio',
-    ],
-    title: 'The Transformative Mystic — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisi magnetic depth deti hai jo log feel karte hain jab aap paas hote hain — explain nahi kar paate lekin drawn rehte hain. Mangal (aur Ketu), jo aapke Lagna ke karaka hain, aapko ek intense investigative mind dete hain — aap surface par nahi rukते، hamesha truth ke andar jaane ki koshish karte hain. Aap logon ko pehli milne mein hi accurately judge kar lete hain — yeh intuition extraordinary level ki hai. {sunSign} Sun aur {moonSign} Moon ka combination aapko emotional depth deta hai jo rarely dikhata hai lekin her relationship ko profoundly affect karta hai. Aap transformation ke master hain — khud ke bhi aur circumstances ke bhi. Jab zindagi aapko todne ki koshish karti hai, aap reborn hote hain. Secrecy natural hai aapko — trust karna mushkil hai, lekin ek baar jo trust kar lete hain uske liye sab kuch karte hain. Aapki research aur investigation capacity almost supernatural hai.`,
-    advice: `Aapka control tendency let go karo — sab kuch control nahi ho sakta, aur yeh anxiety create karta hai. Daily: ek cheez choose karo jis par control release karo. Trust process karo, sirf people ko nahi.`,
+    conditions: [ ctx => ctx.ascSign === 'Scorpio' ],
+    hi: {
+      title: '🦂 वृश्चिक लग्न — रहस्यमय परिवर्तक',
+      description: `{name}, वृश्चिक लग्न आपको एक ऐसी magnetic depth देती है जो लोग feel करते हैं जब आप पास होते हैं।
+
+✨ आपकी खासियतें —
+• मंगल और केतु के influence से आपको एक intense investigative mind मिला है
+• लोगों को पहली मुलाकात में ही accurately judge कर लेते हैं
+• Transformation के master हैं — खुद के भी और circumstances के भी
+• एक बार जिसे trust कर लेते हैं, उसके लिए सब कुछ करते हैं
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको emotional depth देता है। जब ज़िंदगी आपको तोड़ने की कोशिश करती है, आप reborn होते हैं।`,
+      advice: `💡 आपके लिए सुझाव —
+• Control tendency को let go करो — सब कुछ control नहीं हो सकता
+• Daily: एक चीज़ choose करो जिस पर control release करो
+• Trust process करो, सिर्फ लोगों को नहीं`,
+    },
+    en: {
+      title: '🦂 Scorpio Ascendant — The Transformative Mystic',
+      description: `{name}, your Scorpio Ascendant gives you a magnetic depth that people feel when you're near — they can't explain it, but they feel it.
+
+✨ Your strengths —
+• Mars and Ketu's influence gives you an intense investigative mind
+• You can accurately judge people at the very first meeting
+• You are a master of transformation — of yourself and of circumstances
+• Once you trust someone, you do everything for them
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon give you an emotional depth that rarely shows but profoundly shapes every relationship. When life tries to break you, you are reborn.`,
+      advice: `💡 Advice for you —
+• Let go of your control tendency — not everything can be controlled, and that's okay
+• Daily practice: choose one thing to release control over
+• Trust the process, not just people`,
+    },
   },
 
   // ── SAGITTARIUS LAGNA ─────────────────────────────────────────
   {
     id: 'sagittarius_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Sagittarius',
-    ],
-    title: 'The Philosophical Explorer — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisi freedom-seeking personality deta hai jo boundaries se naturally uncomfortable feel karti hai — physical, mental, ya intellectual koi bhi. Guru, jo aapke Lagna Prabhu hain, aapko ek natural philosopher banate hain — aap "why" questions ke jawab dhundhna kabhi band nahi karte. Aapki optimism almost infectious hai — mushkil situation mein bhi aap possibility dekh lete hain. {sunSign} Sun ke saath Sagittarius Lagna ka combination aapko ek born teacher banata hai — formal ya informal, aap jo jaante hain use share karna chahte hain. Travel, diverse cultures, aur new ideas aapki soul food hain. Aapka vision expansive hai — local nahi, global. Honesty aapki ek prominent quality hai — kabhi kabhi itni direct ki log uncomfortable ho jaate hain, lekin diplomatic dishonesty aapko genuinely distress karta hai. Aapka {moonSign} Moon aapko emotional sensitivity deta hai jo aapki philosophical exterior ke peeche roti hai.`,
-    advice: `Ek jagah, ek commitment, ek cheez ko complete karna seekho. Aapka Jupiter nature scattered energy create karta hai — quarterly ek big project choose karo aur baaki sab temporarily park karo jab tak woh complete na ho.`,
+    conditions: [ ctx => ctx.ascSign === 'Sagittarius' ],
+    hi: {
+      title: '🏹 धनु लग्न — दार्शनिक यात्री',
+      description: `{name}, धनु लग्न आपको एक ऐसी freedom-seeking personality देता है जो boundaries से naturally uncomfortable feel करती है।
+
+✨ आपकी खासियतें —
+• गुरु आपके लग्नेश हैं — आप एक natural philosopher हैं
+• Optimism almost infectious है — मुश्किल situation में भी possibility देख लेते हैं
+• Travel, diverse cultures और new ideas आपकी soul food हैं
+• Honesty इतनी prominent है कि कभी-कभी लोग uncomfortable हो जाते हैं
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य के साथ धनु Lagna आपको एक born teacher बनाता है। {moonSign} चंद्र आपको emotional sensitivity देता है जो आपकी philosophical exterior के पीछे रहती है।`,
+      advice: `💡 आपके लिए सुझाव —
+• एक जगह, एक commitment, एक चीज़ को complete करना सीखो
+• Quarterly एक big project choose करो और बाकी सब temporarily park करो
+• Jupiter की scattered energy को channel करना ही असली success है`,
+    },
+    en: {
+      title: '🏹 Sagittarius Ascendant — The Philosophical Explorer',
+      description: `{name}, your Sagittarius Ascendant gives you a freedom-seeking personality that is naturally uncomfortable with boundaries of any kind.
+
+✨ Your strengths —
+• Jupiter is your Lagna Lord — you are a natural philosopher who never stops asking "why"
+• Your optimism is almost infectious — you can see possibility even in difficult situations
+• Travel, diverse cultures, and new ideas are your soul food
+• Your honesty is so prominent it sometimes makes others uncomfortable
+
+🌟 Your personality —
+Your {sunSign} Sun with Sagittarius Ascendant makes you a born teacher. Your {moonSign} Moon gives you emotional sensitivity hidden behind your philosophical exterior.`,
+      advice: `💡 Advice for you —
+• Learn to commit to one place, one promise, and one thing at a time
+• Choose one big project per quarter and park everything else
+• Channeling Jupiter's scattered energy is the real path to success`,
+    },
   },
 
   // ── CAPRICORN LAGNA ───────────────────────────────────────────
   {
     id: 'capricorn_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Capricorn',
-    ],
-    title: 'The Disciplined Achiever — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisi unshakeable discipline deta hai jis par koi bhi rely kar sakta hai. Shani, jo aapke Lagna Prabhu hain, aapko ek long-term thinker banate hain — aap 5-10 saal baad ka sochte hain jab log kal ke liye plan karte hain. Aapki work ethic legendary hai — jo uthate hain woh poora karte hain, deadline missed karna almost physically uncomfortable lagging hai aapko. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek quiet ambition deta hai jo loudly announce nahi karta lekin consistently deliver karta hai. Age ke saath aap more youthful feel karte hain — yeh Shani ka reverse aging gift hai Makar Lagna walon ko. Aap jo build karte hain woh generations tak chalti hai — whether career, family, business, ya legacy. Responsibility aapko weight nahi lagti — aap naturally capable feel karte hain jab load zyada hota hai. Aapka patience ki power almost superhuman hai.`,
-    advice: `Work aur rest ka balance zaruri hai — aap efficiently rest nahi karte aur yeh long term productivity hurt karta hai. Schedule mein "joy time" mandatory add karo, productive activity ki tarah. Shani reward karta hai discipline ko, burnout ko nahi.`,
+    conditions: [ ctx => ctx.ascSign === 'Capricorn' ],
+    hi: {
+      title: '🏔️ मकर लग्न — अनुशासित उपलब्धि',
+      description: `{name}, मकर लग्न आपको एक ऐसी unshakeable discipline देता है जिस पर कोई भी rely कर सकता है।
+
+✨ आपकी खासियतें —
+• शनि आपके लग्नेश हैं — आप 5-10 साल बाद का सोचते हैं जब लोग कल के लिए plan करते हैं
+• Work ethic legendary है — जो उठाते हैं वो पूरा करते हैं
+• उम्र के साथ आप more youthful feel करते हैं — यह शनि का reverse aging gift है
+• जो build करते हैं वो generations तक चलती है
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको एक quiet ambition देता है जो loudly announce नहीं करता लेकिन consistently deliver करता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Work और rest का balance ज़रूरी है — आप efficiently rest नहीं करते
+• Schedule में "joy time" mandatory add करो
+• शनि discipline को reward करता है, burnout को नहीं`,
+    },
+    en: {
+      title: '🏔️ Capricorn Ascendant — The Disciplined Achiever',
+      description: `{name}, your Capricorn Ascendant gives you an unshakeable discipline that anyone can rely on.
+
+✨ Your strengths —
+• Saturn is your Lagna Lord — you think 5-10 years ahead when others plan for tomorrow
+• Your work ethic is legendary — what you pick up, you complete
+• You feel more youthful with age — this is Saturn's reverse aging gift to Capricorn Ascendants
+• What you build lasts for generations
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon give you a quiet ambition that doesn't announce itself loudly but consistently delivers.`,
+      advice: `💡 Advice for you —
+• Balance work with rest — you don't rest efficiently and it hurts long-term productivity
+• Mandatorily add "joy time" to your schedule, treat it like a productive task
+• Saturn rewards discipline, not burnout`,
+    },
   },
 
   // ── AQUARIUS LAGNA ────────────────────────────────────────────
   {
     id: 'aquarius_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Aquarius',
-    ],
-    title: 'The Visionary Humanitarian — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisi futuristic thinking deta hai jo aksar current times se 10-20 saal ahead hoti hai. Shani aur Rahu, Aquarius ke co-rulers, aapko ek unique blend of discipline aur rebellious innovation dete hain. Aap conventional wisdom ko naturally question karte hain — not for the sake of rebellion, but because you can genuinely see better possibilities. {sunSign} Sun ka combination aapko ek intellectual leader banata hai — ideas ki duniya mein comfortable hain, large groups mein equally comfortable hain. Aapka humanitarian streak genuine hai — aap world ki problems ko personally feel karte hain aur change karna chahte hain. Closest relationships mein aap deeply caring hote hain lekin express karna mushkil lagta hai — intellectual detachment default mode hai. Aapka {moonSign} Moon aapko ek hidden emotional depth deta hai. Technology, science, philosophy, social innovation — kisi bhi field mein future banane ki kabiliyat hai aapme.`,
-    advice: `Emotional vulnerability practice karo — aapke intellectualism ke peeche deep feelings hain jo express nahi hoti aur relationships strain karta hai. Ek trusted person choose karo aur regularly check in karo: "Main actually kaisa feel kar raha/rahi hoon?"`,
+    conditions: [ ctx => ctx.ascSign === 'Aquarius' ],
+    hi: {
+      title: '🌊 कुम्भ लग्न — दूरदर्शी मानवतावादी',
+      description: `{name}, कुम्भ लग्न आपको एक ऐसी futuristic thinking देता है जो अक्सर current times से 10-20 साल ahead होती है।
+
+✨ आपकी खासियतें —
+• शनि और राहु के co-rulers — discipline और rebellious innovation का unique blend
+• Conventional wisdom को naturally question करते हैं — rebellion के लिए नहीं, बेहतर possibilities देखने के लिए
+• Humanitarian streak genuine है — दुनिया की problems को personally feel करते हैं
+• Technology, science, philosophy में future बनाने की क्षमता है
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य का combination आपको एक intellectual leader बनाता है। {moonSign} चंद्र एक hidden emotional depth देता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Emotional vulnerability practice करो
+• एक trusted person choose करो: "मैं actually कैसा feel कर रहा/रही हूँ?"
+• Close relationships में intellectual detachment को थोड़ा कम करो`,
+    },
+    en: {
+      title: '🌊 Aquarius Ascendant — The Visionary Humanitarian',
+      description: `{name}, your Aquarius Ascendant gives you a futuristic way of thinking that is often 10-20 years ahead of the times.
+
+✨ Your strengths —
+• Saturn and Rahu as co-rulers give you a unique blend of discipline and rebellious innovation
+• You question conventional wisdom not for rebellion's sake, but because you genuinely see better possibilities
+• Your humanitarian streak is genuine — you personally feel the world's problems
+• You have the capacity to build the future in technology, science, or philosophy
+
+🌟 Your personality —
+Your {sunSign} Sun makes you an intellectual leader. Your {moonSign} Moon gives you a hidden emotional depth.`,
+      advice: `💡 Advice for you —
+• Practice emotional vulnerability — there are deep feelings behind your intellectualism
+• Choose one trusted person and regularly check in: "How am I actually feeling?"
+• Reduce intellectual detachment a little in your closest relationships`,
+    },
   },
 
   // ── PISCES LAGNA ──────────────────────────────────────────────
   {
     id: 'pisces_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Pisces',
-    ],
-    title: 'The Intuitive Dreamer — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aise boundless compassion se bhar deta hai jo rarely milta hai — aap genuinely doosron ka dard feel karte hain. Guru, aapke Lagna Prabhu, aapko ek spiritual wisdom dete hain jo age se nahi aati, soul se aati hai. Aapki imagination aur creativity exceptional hai — art, music, writing, healing — kisi bhi expressive field mein extraordinary work kar sakte hain. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek deep intuition deta hai jo facts se behtar hota hai kabhi kabhi — trust it more. Aap easily others' energies absorb karte hain, isliye aapko regularly alone time mein recharge karna zaroori hai warna overwhelmed ho jaate hain. Spiritual matters mein naturally drawn hote hain — rituals, meditation, ya simply nature se connect hona — yeh aapki battery recharge karta hai. Aapka Pisces nature aapko ek healer quality deta hai — log naturally aapke paas aa jaate hain apni problems le kar, aur aap genuinely help kar paate hain.`,
-    advice: `Boundaries set karna seekho — aapki compassion kabhi kabhi aapko exploit hone deti hai. "No" ek complete sentence hai. Aur regularly ground karo khud ko — nature walk, cooking, ya koi physical activity jo aapko present moment mein rakhe.`,
+    conditions: [ ctx => ctx.ascSign === 'Pisces' ],
+    hi: {
+      title: '🐠 मीन लग्न — सहज स्वप्नदृष्टा',
+      description: `{name}, मीन लग्न आपको एक ऐसे boundless compassion से भर देता है जो rarely मिलता है।
+
+✨ आपकी खासियतें —
+• गुरु आपके लग्नेश हैं — एक spiritual wisdom जो उम्र से नहीं, soul से आती है
+• Imagination और creativity exceptional है — art, music, writing, healing में extraordinary
+• दूसरों की energies easily absorb करते हैं — alone time में recharge ज़रूरी है
+• लोग naturally आपके पास अपनी problems लेकर आते हैं — आप genuinely help कर पाते हैं
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको एक deep intuition देता है। Spiritual matters में naturally drawn होते हैं।`,
+      advice: `💡 आपके लिए सुझाव —
+• Boundaries set करना सीखो — "No" एक complete sentence है
+• Regularly ground करो खुद को — nature walk, cooking या कोई physical activity
+• अपनी compassion की वजह से exploit न होने दो`,
+    },
+    en: {
+      title: '🐠 Pisces Ascendant — The Intuitive Dreamer',
+      description: `{name}, your Pisces Ascendant fills you with a boundless compassion that is rarely found.
+
+✨ Your strengths —
+• Jupiter is your Lagna Lord — a spiritual wisdom that comes not from age, but from the soul
+• Your imagination and creativity are exceptional — extraordinary potential in art, music, writing, healing
+• You easily absorb others' energies — you must regularly recharge with alone time
+• People naturally come to you with their problems — and you genuinely help them
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon give you a deep intuition that is sometimes better than facts — trust it more.`,
+      advice: `💡 Advice for you —
+• Learn to set boundaries — "No" is a complete sentence
+• Regularly ground yourself — nature walks, cooking, or any physical activity
+• Don't let your compassion be taken advantage of`,
+    },
   },
 
   // ── LIBRA LAGNA ───────────────────────────────────────────────
   {
     id: 'libra_lagna',
     weight: 2,
-    conditions: [
-      ctx => ctx.ascSign === 'Libra',
-    ],
-    title: 'The Diplomatic Balancer — {ascSign} Ascendant',
-    description: `{name}, {ascSign} Lagna aapko ek aisi personality deta hai jo naturally balance aur harmony dhundhti hai — conflict aapko physically uncomfortable karta hai. Shukra, aapke Lagna Prabhu, aapko ek refined aesthetic sense dete hain — aap beauty mein raho toh best perform karte hain. Aapka diplomatic skill extraordinary hai — dono sides ko genuinely sun sakte hain aur fair conclusion tak pahunch sakte hain. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek naturally social being banata hai — relationships aapke liye oxygen jaisi hain, alone time occasionally draining laag sakta hai. Aap naturally fair hain — unfairness aapko genuinely distress karta hai. Indecision aapki acknowledged challenge hai, lekin yeh actually multiple perspectives simultaneously see kar paane ki ability ka side effect hai. Aapki presence calming hai — people feel safer and more heard around you. Partnerships — business ya personal — aapko naturally suit karte hain.`,
-    advice: `Decision making practice karo daily: chote decisions mein 2-minute rule lagao — 2 minutes mein decide nahi hua toh flip a coin aur commit karo. Yeh small muscles build karta hai jo bade decisions mein help karta hai.`,
+    conditions: [ ctx => ctx.ascSign === 'Libra' ],
+    hi: {
+      title: '⚖️ तुला लग्न — कूटनीतिक संतुलनकर्ता',
+      description: `{name}, तुला लग्न आपको एक ऐसी personality देता है जो naturally balance और harmony ढूंढती है।
+
+✨ आपकी खासियतें —
+• शुक्र आपके लग्नेश हैं — एक refined aesthetic sense, beauty में रहो तो best perform करते हो
+• Diplomatic skill extraordinary है — दोनों sides को genuinely सुन सकते हैं
+• आप naturally fair हैं — unfairness आपको genuinely distress करती है
+• Partnerships — business या personal — आपको naturally suit करती हैं
+
+🌟 आपका व्यक्तित्व —
+{sunSign} सूर्य और {moonSign} चंद्र का combination आपको एक naturally social being बनाता है। Indecision आपकी challenge है — लेकिन यह multiple perspectives एक साथ देखने की ability का side effect है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Decision making daily practice करो: छोटे decisions में 2-minute rule लगाओ
+• 2 minutes में decide नहीं हुआ तो coin flip करो और commit करो
+• यह small muscles build करता है जो बड़े decisions में help करता है`,
+    },
+    en: {
+      title: '⚖️ Libra Ascendant — The Diplomatic Balancer',
+      description: `{name}, your Libra Ascendant gives you a personality that naturally seeks balance and harmony in everything.
+
+✨ Your strengths —
+• Venus is your Lagna Lord — a refined aesthetic sense, you perform best in beautiful environments
+• Your diplomatic skill is extraordinary — you can genuinely listen to both sides
+• You are naturally fair — unfairness genuinely distresses you
+• Partnerships — business or personal — suit you naturally
+
+🌟 Your personality —
+Your {sunSign} Sun and {moonSign} Moon make you a naturally social being. Indecision is your acknowledged challenge — but it's actually a side effect of your ability to see multiple perspectives simultaneously.`,
+      advice: `💡 Advice for you —
+• Practice decision-making daily: apply the 2-minute rule for small decisions
+• If you can't decide in 2 minutes, flip a coin and commit
+• This builds the small muscles that help with big decisions`,
+    },
   },
 
   // ── GAJ KESARI YOGA ───────────────────────────────────────────
@@ -165,69 +506,245 @@ export const personalityTemplates = [
       ctx => ctx.yogas.includes('GajKesari'),
       ctx => ['Sagittarius','Cancer','Pisces'].includes(ctx.ascSign),
     ],
-    title: 'Gaj Kesari Yoga — {ascSign} Lagna: The Wise Leader',
-    description: `{name}, aapki kundli mein Gaj Kesari Yoga hai — yeh ek powerful aur rare combination hai jahan Guru (Jupiter) aur Chandra ek doosre se kendra mein hain. Vedic shastra mein yeh yoga wise rulers, respected teachers, aur community leaders ko diya gaya hai. Aapke {ascSign} Lagna ke saath yeh yoga aapko ek exceptional wisdom deta hai jo decisions mein consistently ache results deta hai. Logon ki aapke upar natural trust hoti hai — even strangers aapko reliable feel karte hain pehli milne mein. Aapki memory sharp hai, wisdom age ke saath extraordinary ho jaati hai, aur aap jahan bhi hote hain wahan positivity laate hain. Aapke {sunSign} Sun aur {moonSign} Moon ka blend aapki personality mein warmth aur intelligence dono present rakhta hai jo rarely ek saath milta hai. Gaj Kesari log life mein usually recognition, respect, aur material comfort paate hain — not by luck, but by genuine merit aur consistent right action.`,
-    advice: `Apni wisdom share karo — mentoring, teaching, ya writing ke zariye. Guru ka ashirvaad tabhi badhta hai jab aap jo jaante hain use pass on karte hain. Guruvar (Thursday) ko ek young person ya student ki guidance karna aapka Jupiter aur stronger karta hai.`,
+    hi: {
+      title: '🐘 गज केसरी योग — बुद्धिमान नेता',
+      description: `{name}, आपकी कुंडली में गज केसरी योग है — गुरु और चंद्र एक दूसरे से केंद्र में हैं।
+
+✨ यह योग क्या देता है —
+• Wise rulers और respected teachers का yoga है — यह आपके लिए है
+• लोगों की आप पर natural trust होती है — पहली मुलाकात में ही reliable feel होते हैं
+• Memory sharp है, wisdom उम्र के साथ extraordinary होती जाती है
+• जहाँ भी होते हैं, वहाँ positivity लाते हैं
+
+🌟 आपकी विशेषता —
+{ascSign} लग्न के साथ यह yoga exceptional decisions लेने की wisdom देता है। {sunSign} सूर्य और {moonSign} चंद्र का blend warmth और intelligence दोनों एक साथ देता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• अपनी wisdom share करो — mentoring, teaching या writing के ज़रिए
+• गुरु का आशीर्वाद तभी बढ़ता है जब आप जो जानते हैं उसे pass on करते हैं
+• गुरुवार को एक young person को guidance देना Jupiter को और strong करता है`,
+    },
+    en: {
+      title: '🐘 Gaj Kesari Yoga — The Wise Leader',
+      description: `{name}, your chart has Gaj Kesari Yoga — Jupiter and Moon are in kendra from each other.
+
+✨ What this yoga gives you —
+• This is the yoga of wise rulers and respected teachers — it belongs to you
+• People naturally trust you — they feel you're reliable at first meeting
+• Your memory is sharp, and your wisdom grows extraordinary with age
+• Wherever you go, you bring positivity
+
+🌟 Your special quality —
+With your {ascSign} Ascendant, this yoga gives you exceptional decision-making wisdom. Your {sunSign} Sun and {moonSign} Moon blend warmth and intelligence — a combination that's rarely found together.`,
+      advice: `💡 Advice for you —
+• Share your wisdom — through mentoring, teaching, or writing
+• Jupiter's grace grows only when you pass on what you know
+• Guiding one young person on Thursdays makes your Jupiter even stronger`,
+    },
   },
 
   // ── BUDHADITYA YOGA ───────────────────────────────────────────
   {
     id: 'budhaditya',
     weight: 3,
-    conditions: [
-      ctx => ctx.yogas.includes('Budhaditya'),
-    ],
-    title: 'Budhaditya Yoga — The Brilliant Communicator',
-    description: `{name}, aapki kundli mein ek powerful intellectual yoga hai — Budhaditya Yoga, jahan Surya aur Budh ek hi rashi mein sthit hain. Yeh combination aapko ek extraordinary intelligence deta hai jo sirf academic nahi, practical bhi hai. Aap jo bhi subject pakadte hain, usmein depth of understanding quickly aati hai. Aapki communication skill natural hai — bolne mein bhi aur likhne mein bhi — logon ko aapki baat samajh aati hai aur impact karti hai. {ascSign} Lagna ke saath yeh yoga aapko ek sharp analytical mind deta hai jo problems mein patterns dekhta hai jab doosron ko sirf chaos dikhta hai. Aapka {sunSign} Sun {moonSign} Moon ke saath balance ek unique creative-intellectual blend banata hai. Career mein aap writing, teaching, technology, consulting, law, ya media mein exceptional success pa sakte hain. Doosron ke saath apni thoughts clearly articulate karne ki kabiliyat aapko leader quality deti hai jab bhi aap sochna band karo aur simply bol do.`,
-    advice: `Apni intellectual energy ko ek specific mastery mein invest karo — generalist mat raho. Budhaditya yoga tabhi fully bloom karta hai jab aap apni specific niche dhundh lete hain aur usme depth build karte hain.`,
+    conditions: [ ctx => ctx.yogas.includes('Budhaditya') ],
+    hi: {
+      title: '☀️ बुधादित्य योग — तेज़ बुद्धि, sharp ज़बान',
+      description: `{name}, आपकी कुंडली में बुधादित्य योग है — सूर्य और बुध एक ही राशि में।
+
+✨ यह योग क्या देता है —
+• जो भी subject पकड़ते हैं उसमें depth of understanding quickly आती है
+• Communication skill natural है — बोलने और लिखने दोनों में
+• Problems में patterns देखते हैं जब दूसरों को सिर्फ chaos दिखता है
+• Writing, teaching, technology, consulting, law, media में exceptional success possible है
+
+🌟 आपका advantage —
+{ascSign} लग्न के साथ यह yoga एक sharp analytical mind देता है। {sunSign} सूर्य और {moonSign} चंद्र का balance एक unique creative-intellectual blend बनाता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Intellectual energy को एक specific mastery में invest करो — generalist मत रहो
+• LinkedIn, blog या newsletter शुरू करो
+• Public speaking में invest करो — यह yoga तब fully bloom करता है`,
+    },
+    en: {
+      title: '☀️ Budhaditya Yoga — Sharp Mind, Sharp Words',
+      description: `{name}, your chart has Budhaditya Yoga — Sun and Mercury in the same sign.
+
+✨ What this yoga gives you —
+• Whatever subject you pick up, depth of understanding comes quickly
+• Your communication skill is natural — both in speaking and writing
+• You see patterns in problems when others only see chaos
+• Exceptional success potential in writing, teaching, technology, consulting, law, and media
+
+🌟 Your advantage —
+With your {ascSign} Ascendant, this yoga gives you a sharp analytical mind. Your {sunSign} Sun and {moonSign} Moon create a unique creative-intellectual blend.`,
+      advice: `💡 Advice for you —
+• Invest your intellectual energy into one specific mastery — don't stay a generalist
+• Start a LinkedIn, blog, or newsletter — Mercury energy amplifies in written form
+• Invest in public speaking — this yoga fully blooms through that channel`,
+    },
   },
 
   // ── MARS IN 10th HOUSE ────────────────────────────────────────
   {
     id: 'mars_10th',
     weight: 2,
-    conditions: [
-      ctx => ctx.p.mars?.house === 10,
-    ],
-    title: 'Mangal in 10th House — Karmic Warrior in Career',
-    description: `{name}, aapka Mangal 10th Ghar (Karma Bhava) mein sthit hai — yeh ek exceptionally powerful position hai career aur public life ke liye. Mangal jo energy deta hai wo direct kaam karne mein aati hai, aur 10th house mein yeh professional world mein visible aur impactful hoti hai. Aap apne career mein aggressive lakin constructive taur par kaam karte hain — competition se nahi darate, balki use fuel ki tarah use karte hain. {ascSign} Lagna ke saath yeh placement aapko ek natural authority figure banata hai — loge naturally aapko leader manta dekhna chahte hain. Aapka {sunSign} Sun aur {moonSign} Moon ka combination aapki personality mein ek drive hai jo rarely relaxes — yeh aapka asset bhi hai aur kabhi kabhi stress source bhi. Mars in 10th log often military, police, surgery, engineering, sports, politics, ya entrepreneurship mein exceptional success paate hain. Ek important baat: anger management is crucial — 10th house Mars ka outburst public mein visible hota hai aur reputation damage kar sakta hai.`,
-    advice: `Physical exercise daily karo — Mangal ki energy body se nikaalna zaroori hai warna excessive stress ya anger accumulate hoti hai. Martial arts, running, ya weight training — kuch bhi jo intensity allow kare safely. Career mein leadership roles accept karo without hesitation.`,
+    conditions: [ ctx => ctx.p.mars?.house === 10 ],
+    hi: {
+      title: '⚔️ दशम भाव में मंगल — करियर का योद्धा',
+      description: `{name}, आपका मंगल 10वें घर में है — career के लिए एक exceptionally powerful position।
+
+✨ आपकी खासियतें —
+• Competition से नहीं डरते, उसे fuel की तरह use करते हैं
+• लोग naturally आपको leader मानकर चलना चाहते हैं
+• Military, police, surgery, engineering, sports, politics, entrepreneurship में exceptional success possible है
+• Pressure में performance better होती है, कम नहीं
+
+⚠️ ध्यान रखें —
+Anger management crucial है — 10th house Mars का outburst public में visible होता है और reputation damage कर सकता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Daily physical exercise ज़रूरी है — मंगल की energy body से निकालना ज़रूरी है
+• Martial arts, running या weight training — कुछ भी जो intensity safely allow करे
+• Leadership roles accept करो without hesitation`,
+    },
+    en: {
+      title: '⚔️ Mars in 10th House — The Career Warrior',
+      description: `{name}, your Mars is in the 10th house — an exceptionally powerful position for career and public life.
+
+✨ Your strengths —
+• You don't fear competition — you use it as fuel
+• People naturally want to see you as a leader
+• Exceptional success potential in military, police, surgery, engineering, sports, politics, entrepreneurship
+• Your performance gets better under pressure, not worse
+
+⚠️ Watch out —
+Anger management is crucial — a 10th house Mars outburst is visible publicly and can damage your reputation.`,
+      advice: `💡 Advice for you —
+• Daily physical exercise is essential — Mars energy must be released through the body
+• Martial arts, running, or weight training — anything that safely allows intensity
+• Accept leadership roles without hesitation`,
+    },
   },
 
   // ── SATURN IN 7th HOUSE ───────────────────────────────────────
   {
     id: 'saturn_7th',
     weight: 2,
-    conditions: [
-      ctx => ctx.p.saturn?.house === 7,
-    ],
-    title: 'Shani in 7th House — Karmic Partnerships',
-    description: `{name}, aapka Shani 7th Ghar (Vivah aur Partnership Bhava) mein sthit hai — yeh ek intense position hai jo relationships mein seriousness aur deep karmic lessons laata hai. Aap relationships mein rush nahi karte — aur yeh actually wise hai. Partnership ke baare mein aap jo caution feel karte hain woh fear nahi, wisdom hai. Shani 7th house walon ko usually late marriage ya delayed serious commitment milta hai, lekin jab milta hai toh typically long-lasting aur mature hota hai. Aapka {ascSign} Lagna aur {sunSign} Sun ka combination suggest karta hai ki partnership mein aap ek reliable, committed partner bante hain jo responsibilities seriously lete hain. Aapka {moonSign} Moon emotional depth deta hai jo surface par nahi dikhta. Important: 7th house Shani business partnerships mein bhi caution suggest karta hai — written agreements hamesha karo, trust aur documents dono zaroori hain. Life mein aapke sabse bade teacher aapke partners honge — romantic ya business.`,
-    advice: `Partnership decisions mein time lo — Shani deliberate process ko reward karta hai. 2-3 saal ke relationship ke baad hi long-term decisions lo. Business partnership mein lawyer se agreement zaroor banwao chahe kitna bhi close hो.`,
+    conditions: [ ctx => ctx.p.saturn?.house === 7 ],
+    hi: {
+      title: '🪐 सप्तम भाव में शनि — गहरी karmic partnership',
+      description: `{name}, आपका शनि 7वें घर में है — relationships में सeriousness और deep karmic lessons।
+
+✨ आपकी खासियतें —
+• Relationships में rush नहीं करते — और यह actually wise है
+• जो caution feel करते हैं वो fear नहीं, wisdom है
+• Late या delayed commitment मिलती है — लेकिन जब मिलती है तो long-lasting और mature होती है
+• Life में सबसे बड़े teacher आपके partners होंगे — romantic या business
+
+🌟 आपका pattern —
+{ascSign} लग्न और {sunSign} सूर्य suggest करते हैं कि partnership में आप एक reliable, committed partner बनते हैं।`,
+      advice: `💡 आपके लिए सुझाव —
+• Partnership decisions में time लो — शनि deliberate process को reward करता है
+• 2-3 साल के relationship के बाद ही long-term decisions लो
+• Business partnership में lawyer से agreement ज़रूर बनवाओ`,
+    },
+    en: {
+      title: '🪐 Saturn in 7th House — Karmic Partnerships',
+      description: `{name}, your Saturn is in the 7th house — bringing seriousness and deep karmic lessons to relationships.
+
+✨ Your strengths —
+• You don't rush into relationships — and that's actually wise
+• The caution you feel is not fear, it's wisdom
+• You tend toward late or delayed commitment — but when it comes, it's long-lasting and mature
+• Life's greatest teachers will be your partners — romantic or business
+
+🌟 Your pattern —
+Your {ascSign} Ascendant and {sunSign} Sun suggest you become a reliable, committed partner once in a relationship.`,
+      advice: `💡 Advice for you —
+• Take your time with partnership decisions — Saturn rewards the deliberate approach
+• Make long-term decisions only after 2-3 years in a relationship
+• Always get a legally drafted agreement in business partnerships`,
+    },
   },
 
   // ── JUPITER IN 1st HOUSE ──────────────────────────────────────
   {
     id: 'jupiter_1st',
     weight: 2,
-    conditions: [
-      ctx => ctx.p.jupiter?.house === 1,
-    ],
-    title: 'Guru in Lagna — The Blessed Personality',
-    description: `{name}, Guru 1st Ghar mein — yeh ek divine blessing hai jo aapki poori personality mein ek luminous quality add karta hai. Log aapki presence mein naturally better feel karte hain — inspired, hopeful, ya simply at ease. Yeh coincidence nahi, Jupiter's grace directly aapki aura ko touch karta hai. Aap naturally generous hain, optimistic hain, aur life mein opportunities create karna jaante hain jab dusron ko sirf obstacles dikh rahe hote hain. {ascSign} Lagna ke saath 1st house Jupiter aapko ek philosophical aur wise personality deta hai jo age ke saath aur grow karti hai. Physically bhi 1st house Jupiter weight management mein thodi challenge de sakta hai — lekin yeh healthy lifestyle se easily balance hoti hai. Aapki teaching ability natural hai — formally ya informally, log aapse seekhte hain. {sunSign} Sun aur {moonSign} Moon ka combination aapko ek warm, expansive personality deta hai. Luck genuinely aapke saath hota hai — isliye grateful raho aur give back karo.`,
-    advice: `Aapki natural optimism kabhi kabhi overconfidence mein convert ho sakti hai — reality check regular karo. Ek trusted person rakho jo honestly feedback de sake. Jupiter ka anugraha humesha dhyan se aur judgment ke saath rehna chahiye.`,
+    conditions: [ ctx => ctx.p.jupiter?.house === 1 ],
+    hi: {
+      title: '🌟 प्रथम भाव में गुरु — आशीर्वाद से भरा व्यक्तित्व',
+      description: `{name}, गुरु पहले घर में — यह एक divine blessing है।
+
+✨ आपकी खासियतें —
+• लोग आपकी presence में naturally better feel करते हैं — inspired, hopeful, या simply at ease
+• आप naturally generous हैं, optimistic हैं
+• Life में opportunities create करना जानते हैं जब दूसरों को सिर्फ obstacles दिखते हैं
+• Teaching ability natural है — formally या informally, लोग आपसे सीखते हैं
+
+🌟 आपकी personality —
+{ascSign} लग्न के साथ 1st house Jupiter एक philosophical और wise personality देता है। Luck genuinely आपके साथ होता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Natural optimism कभी-कभी overconfidence में convert हो सकती है — reality check regular करो
+• एक trusted person रखो जो honestly feedback दे
+• Jupiter का अनुग्रह हमेशा ध्यान और judgment के साथ रहना चाहिए`,
+    },
+    en: {
+      title: '🌟 Jupiter in 1st House — The Blessed Personality',
+      description: `{name}, Jupiter in the first house — this is a divine blessing.
+
+✨ Your strengths —
+• People naturally feel better in your presence — inspired, hopeful, or simply at ease
+• You are naturally generous and optimistic
+• You know how to create opportunities where others only see obstacles
+• Your teaching ability is natural — formally or informally, people learn from you
+
+🌟 Your personality —
+Your {ascSign} Ascendant with 1st house Jupiter gives you a philosophical and wise personality. Luck is genuinely on your side.`,
+      advice: `💡 Advice for you —
+• Natural optimism can sometimes turn into overconfidence — do regular reality checks
+• Keep one trusted person who gives you honest feedback
+• Jupiter's grace should always be used with care and good judgment`,
+    },
   },
 
   // ── MOON EXALTED ──────────────────────────────────────────────
   {
     id: 'moon_exalted',
     weight: 2,
-    conditions: [
-      ctx => ctx.p.moon?.dignity === 'exalted',
-    ],
-    title: 'Uchcha Chandra — The Emotionally Gifted Soul',
-    description: `{name}, aapka Chandra Vrishabh Rashi mein uchcha (exalted) hai — yeh ek exceptional position hai jo aapko ek naturally stable, nurturing, aur emotionally intelligent personality deta hai. Exalted Moon ka matlab hai ki aapki emotional depth aur intuition sabse pure form mein hai. Log aapke paas naturally emotional support dhundh ke aate hain — aap genuinely empathize kar paate hain bina overwhelmed huye. {ascSign} Lagna ke saath exalted Moon aapko ek grounded yet deeply sensitive combination deta hai. Aapki memory — especially emotional aur sensory — exceptional hai. Art, music, food, nature, ya koi bhi sensory experience aapko deeply move karta hai. {sunSign} Sun aap mein ek purposeful direction add karta hai jo uchcha Chandra ki receptivity ko productive channel mein dalta hai. Aapki intuition regarding people aur situations almost never wrong hoti — trust karo use, even when logic seems to contradict. Financial security aur material comfort uchcha Chandra walon ko usually natural taur par aata hai life mein.`,
-    advice: `Apni extraordinary empathy ka regular recharge karo — nature walk, creative expression, ya spiritual practice se. Uchcha Chandra ki energy tab best kaam karti hai jab receptive vessel clean hoti hai.`,
+    conditions: [ ctx => ctx.p.moon?.dignity === 'exalted' ],
+    hi: {
+      title: '🌕 उच्च चंद्र — भावनात्मक बुद्धिमत्ता',
+      description: `{name}, आपका चंद्र वृषभ राशि में उच्च (exalted) है।
+
+✨ आपकी खासियतें —
+• Emotional depth और intuition सबसे pure form में है
+• लोग आपके पास naturally emotional support ढूंढकर आते हैं — genuinely empathize कर पाते हैं
+• Memory — especially emotional और sensory — exceptional है
+• Financial security और material comfort naturally आती है life में
+
+🌟 आपकी विशेषता —
+{ascSign} लग्न के साथ उच्च चंद्र आपको grounded yet deeply sensitive combination देता है। {sunSign} सूर्य एक purposeful direction add करता है।`,
+      advice: `💡 आपके लिए सुझाव —
+• Extraordinary empathy का regular recharge करो — nature walk, creative expression या spiritual practice से
+• उच्च चंद्र की energy तब best काम करती है जब receptive vessel clean हो
+• People pleasing से बचो — empathy आपकी strength है, weakness नहीं`,
+    },
+    en: {
+      title: '🌕 Exalted Moon — Emotional Intelligence at Its Peak',
+      description: `{name}, your Moon is exalted in Taurus — an exceptional position.
+
+✨ Your strengths —
+• Your emotional depth and intuition are in their purest form
+• People naturally come to you seeking emotional support — and you genuinely empathize
+• Your memory — especially emotional and sensory — is exceptional
+• Financial security and material comfort tend to come naturally in life
+
+🌟 Your special quality —
+Your {ascSign} Ascendant with exalted Moon gives you a grounded yet deeply sensitive combination. Your {sunSign} Sun adds purposeful direction.`,
+      advice: `💡 Advice for you —
+• Regularly recharge your extraordinary empathy — nature walks, creative expression, or spiritual practice
+• Exalted Moon energy works best when the receptive vessel is clean and clear
+• Avoid people-pleasing — your empathy is your strength, not your weakness`,
+    },
   },
 
   // ── DEFAULT FALLBACK ──────────────────────────────────────────
@@ -235,8 +752,37 @@ export const personalityTemplates = [
     id: 'default_personality',
     weight: 0,
     conditions: [],
-    title: 'Your Celestial Blueprint — {sunSign} Sun, {moonSign} Moon',
-    description: `{name}, aapki kundli mein {sunSign} Surya, {moonSign} Chandra, aur {ascSign} Lagna ka combination aapko ek unique aur multi-layered personality deta hai. {ascSign} Lagna aapki outer personality banata hai — pehli impression jab log aapko dekhte hain. {sunSign} Sun aapka core self hai — jo aap actually ho andar se. {moonSign} Moon aapki emotional nature hai — how you feel, react, aur intuitively respond. Teen ka yeh combination rarely same hota hai do logon mein, isliye aap genuinely unique hain. Aapka {nakshatra} Nakshatra, jiske lord {nakshatraLord} hain, aapki personality mein ek specific quality add karta hai jo ek tareh se aapka cosmic signature hai. Current {mahadasha} Mahadasha ka bhi personality par effect hai — yeh influence {dashaEndYear} tak rahega. Life Path {lp} aapke karmic purpose ko represent karta hai aur aapki personality mein ek underlying motivation create karta hai jo surface par hamesha visible nahi hoti lekin consistently guide karti hai.`,
-    advice: `Apni teen planetary natures — Sun, Moon, aur Ascendant — ko consciously integrate karo. Jab teeno align hote hain, personality ka authentic expression hota hai jo success attract karta hai.`,
+    hi: {
+      title: '🌌 आपका ब्रह्मांडीय व्यक्तित्व — {sunSign} सूर्य, {moonSign} चंद्र',
+      description: `{name}, आपकी कुंडली में {sunSign} सूर्य, {moonSign} चंद्र और {ascSign} लग्न का combination आपको एक unique और multi-layered personality देता है।
+
+✨ तीन परतें —
+• {ascSign} लग्न: आपकी outer personality — पहली impression जब लोग आपको देखते हैं
+• {sunSign} सूर्य: आपका core self — जो आप actually हो अंदर से
+• {moonSign} चंद्र: आपकी emotional nature — कैसे feel करते हैं, react करते हैं
+
+🌟 आपका cosmic signature —
+आपका {nakshatra} नक्षत्र, lord {nakshatraLord}, आपकी personality में एक specific quality add करता है। Current {mahadasha} महादशा का भी personality पर effect है — यह influence {dashaEndYear} तक रहेगा।`,
+      advice: `💡 आपके लिए सुझाव —
+• अपनी तीन planetary natures — सूर्य, चंद्र और लग्न — को consciously integrate करो
+• जब तीनों align होते हैं, authentic expression होता है जो success attract करता है
+• Life Path {lp} आपके karmic purpose को represent करता है — इसे guide मानो`,
+    },
+    en: {
+      title: '🌌 Your Celestial Blueprint — {sunSign} Sun, {moonSign} Moon',
+      description: `{name}, your chart's combination of {sunSign} Sun, {moonSign} Moon, and {ascSign} Ascendant gives you a unique and multi-layered personality.
+
+✨ Three layers —
+• {ascSign} Ascendant: your outer personality — the first impression people see
+• {sunSign} Sun: your core self — who you actually are on the inside
+• {moonSign} Moon: your emotional nature — how you feel, react, and intuitively respond
+
+🌟 Your cosmic signature —
+Your {nakshatra} Nakshatra, ruled by {nakshatraLord}, adds a specific quality to your personality. The current {mahadasha} Mahadasha also affects your personality — this influence lasts until {dashaEndYear}.`,
+      advice: `💡 Advice for you —
+• Consciously integrate your three planetary natures — Sun, Moon, and Ascendant
+• When all three align, authentic expression happens — and that attracts success
+• Life Path {lp} represents your karmic purpose — treat it as your guiding compass`,
+    },
   },
 ];
