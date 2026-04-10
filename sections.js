@@ -828,7 +828,7 @@ Speculative investments, gambling और overnight wealth schemes।`,
 • Slowly build, never gamble`,
     },
     en: {
-      title: '⚖️ Saturn's Challenge — Building Wealth Through Discipline',
+      title: "⚖️ Saturn's Challenge — Building Wealth Through Discipline",
       description: `{name}, your Saturn is debilitated or in the 12th house — indicating specific financial challenges.
 
 ✨ What this means —
@@ -991,7 +991,7 @@ export const remediesTemplates = [
 • Patience रखो — यह भी गुज़र जाएगा`,
     },
     en: {
-      title: '🪐 Sade Sati Remedies — Navigating Saturn's Test',
+     title: "🪐 Sade Sati Remedies — Navigating Saturn's Test",
       description: `{name}, you are currently in the Sade Sati period — a 7.5-year Saturn transit.
 
 ✨ Specific remedies —
