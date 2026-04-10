@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════
-// AstroVerse AI — Frontend ↔ Backend Connector  (FIXED v2)
+// AstroVerse — Frontend ↔ Backend Connector
 // astroverse-api.js
 //
 // HOW TO USE:
@@ -12,7 +12,7 @@
 // WHAT THIS FILE DOES:
 //   - Checks if backend is reachable on load
 //   - Provides window.fetch* functions that the HTML calls
-//   - All AI features route through here to the backend
+//   - All template features route through here to the backend
 // ═══════════════════════════════════════════════════════════════
 
 // ── Config ────────────────────────────────────────────────────
@@ -39,74 +39,13 @@ async function checkBackend() {
   try {
     const res  = await fetch(`${BACKEND_URL}/api/health`);
     const data = await res.json();
-    // FIX: was data.aiModel — health endpoint returns field named 'model', not 'aiModel'
-    console.log(`✅ AstroVerse Backend connected — model: ${data.model}`);
+    console.log(`✅ AstroVerse Backend connected — service: ${data.service || 'AstroVerse'}`);
     return true;
   } catch (e) {
-    console.warn('⚠️ AstroVerse Backend not reachable. AI features will be unavailable.');
+    console.warn('⚠️ AstroVerse Backend not reachable. Template features will be unavailable.');
     return false;
   }
 }
-
-
-// ═══════════════════════════════════════════════════════════════
-// AI OVERRIDES  (called by the HTML after chart is generated)
-// ═══════════════════════════════════════════════════════════════
-
-// OVERRIDE 1: Full Kundli AI Analysis
-// Called in generateFullKundli() after local calculations
-window.fetchKundliAnalysis = async function(chartData, lang = 'en') {
-  try {
-    return await apiPost('/api/kundli-analysis', { chartData, lang });
-  } catch (e) {
-    console.error('Kundli analysis failed:', e.message);
-    return { personality:{}, career:{}, love:{}, health:{}, remedies:{}, timeline:[] };
-  }
-};
-
-// OVERRIDE 2: Hot Questions — single question answer
-window.fetchHotAnswer = async function(question, category, chartData) {
-  try {
-    const data = await apiPost('/api/hot-questions', { question, category, chartData });
-    return data.answer || '';
-  } catch (e) {
-    console.error('Hot question failed:', e.message);
-    return '';
-  }
-};
-
-// OVERRIDE 3: Magic Search — batch answers (parallel on backend)
-// questions = [{type, text}, ...]
-window.fetchMagicAnswers = async function(questions, chartData) {
-  try {
-    const data = await apiPost('/api/magic-search', { questions, chartData });
-    return data.answers || [];
-  } catch (e) {
-    console.error('Magic search failed:', e.message);
-    return [];
-  }
-};
-
-// OVERRIDE 4: Compatibility AI narrative
-// gunaScore = Ashta Kuta score out of 36 (calculated locally)
-window.fetchCompatAnalysis = async function(person1, person2, gunaScore) {
-  try {
-    return await apiPost('/api/compatibility', { person1, person2, gunaScore });
-  } catch (e) {
-    console.error('Compat analysis failed:', e.message);
-    return null;
-  }
-};
-
-// OVERRIDE 5: Numerology AI interpretation
-window.fetchNumerologyAnalysis = async function(name, dob, lp, expr, soul, pers) {
-  try {
-    return await apiPost('/api/numerology', { name, dob, lp, expr, soul, pers });
-  } catch (e) {
-    console.error('Numerology analysis failed:', e.message);
-    return null;
-  }
-};
 
 
 // ═══════════════════════════════════════════════════════════════
@@ -143,22 +82,38 @@ window.fetchFullTemplateAnalysis = async function(chartData, lang = 'en', sectio
   }
 };
 
-// Helper: render a template result into a container element
+// ── XSS-safe HTML escaping helper ────────────────────────────
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Helper: render a template result into a container element.
+// All API-supplied strings are HTML-escaped to prevent XSS.
 window.renderTemplateSection = function(sectionName, result, containerEl) {
   if (!result || !containerEl) return;
   const { title, description, advice } = result;
+
+  const safeTitle       = escapeHtml(title || sectionName.toUpperCase());
+  const safeDescription = escapeHtml(description || '').replace(/\n/g, '<br>');
+  const safeAdvice      = escapeHtml(advice || '');
+
   containerEl.innerHTML = `
     <div style="padding: 20px 0;">
       <div style="font-family:'Cinzel',serif;font-size:0.75rem;letter-spacing:2px;color:var(--gold);margin-bottom:12px;">
-        ✦ ${title || sectionName.toUpperCase()}
+        ✦ ${safeTitle}
       </div>
       <p style="font-size:0.88rem;color:var(--text);line-height:1.9;margin-bottom:20px;">
-        ${(description || '').replace(/\n/g, '<br>')}
+        ${safeDescription}
       </p>
-      ${advice ? `
+      ${safeAdvice ? `
         <div style="background:rgba(201,168,76,0.05);border-left:2px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-top:12px;">
           <div style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:var(--gold);margin-bottom:8px;">💡 UPAY & ADVICE</div>
-          <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;">${advice}</p>
+          <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;">${safeAdvice}</p>
         </div>
       ` : ''}
     </div>`;
