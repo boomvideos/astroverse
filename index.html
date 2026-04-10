@@ -2865,8 +2865,8 @@ function initPanchang() {
   // ── Dynamic Sunrise/Sunset ────────────────────────────────────
   // Use user's birth location (lat/lng from chartDataFull) if available,
   // otherwise default to IST (lat 23°N, lng 80°E as central India).
-  const userLat = (typeof chartDataFull !== 'undefined' && chartDataFull?.lat) ? chartDataFull.lat : 23.0;
-  const userLng = (typeof chartDataFull !== 'undefined' && chartDataFull?.lng) ? chartDataFull.lng : 80.0;
+  const userLat = chartDataFull?.lat ?? 23.0;
+  const userLng = chartDataFull?.lng ?? 80.0;
 
   // Calculate sunrise/sunset using NOAA simplified solar algorithm.
   // Returns times in minutes from local midnight.
@@ -2914,7 +2914,15 @@ function initPanchang() {
   const rahuPart = RAHU_PART[today.getDay()];
   const rahuStartMin = sunriseMin + (rahuPart - 1) * (dayDurationMin / 8);
   const rahuEndMin   = rahuStartMin + (dayDurationMin / 8);
-  const fmtMin = m => { const h=Math.floor(((m%1440)+1440)%1440/60),mn=Math.round(((m%1440)+1440)%1440%60),ampm=h>=12?'PM':'AM',h12=h%12||12; return `${h12}:${String(mn).padStart(2,'0')} ${ampm}`; };
+  // Format minutes-from-midnight as 12-hour clock string (handles negative values and day overflow)
+  const fmtMin = (totalMinutes) => {
+    const normalized = ((totalMinutes % 1440) + 1440) % 1440;
+    const h   = Math.floor(normalized / 60);
+    const mn  = Math.round(normalized % 60);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const h12  = h % 12 || 12;
+    return `${h12}:${String(mn).padStart(2, '0')} ${ampm}`;
+  };
   const rahuKaal = `${fmtMin(rahuStartMin)} – ${fmtMin(rahuEndMin)}`;
 
   // Brahma Muhurta — 96 min before sunrise, 48 min duration

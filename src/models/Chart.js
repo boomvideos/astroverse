@@ -17,7 +17,7 @@ const ChartSchema = new Schema(
     moonSign:  { type: String },
     ascendant: { type: String },
     nakshatra: { type: String },
-    lifePath:  { type: Number },
+    lifePath:  { type: Number }, // Pythagorean numerology life path number
 
     // Raw planet positions snapshot (stored as JSON)
     planets: { type: Schema.Types.Mixed },
