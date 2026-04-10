@@ -1245,7 +1245,7 @@ Inner security की feeling family से मिलती है।`,
 • यह आपकी emotional roots हैं — इन्हें nurture करो`,
     },
     en: {
-      title: '🏠 Moon in 4th House — The Family's Heart',
+      title: "🏠 Moon in 4th House — The Family's Heart",
       description: `{name}, your Moon is in the 4th house — giving you an exceptionally deep connection with family and home.
 
 ✨ Your family role —
@@ -1285,7 +1285,7 @@ Your sense of inner security comes from family.`,
 • Ancestors का regular remembrance family prosperity maintain करता है`,
     },
     en: {
-      title: '☀️ Sun in 9th House — Father's Blessing',
+     title: "☀️ Sun in 9th House — Father's Blessing",
       description: `{name}, your Sun is in the 9th house — indicating a profound karmic connection with your father and guru.
 
 ✨ Your family pattern —
