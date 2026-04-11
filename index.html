@@ -4959,6 +4959,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Wrap showView to push a history entry on every view change
   const _svFinal = window.showView;
+  // skipHistory: pass true when navigating via popstate to avoid creating duplicate history entries
   window.showView = function(id, skipHistory) {
     _svFinal(id);
     if (!skipHistory && !_historyNavigating) {
@@ -5050,10 +5051,10 @@ function sendOTP() {
   if (d1) d1.focus();
 }
 
-const OTP_DIGITS = [1,2,3,4,5,6];
+const OTP_DIGIT_POSITIONS = [1,2,3,4,5,6];
 
 function verifyOTP() {
-  const otp = OTP_DIGITS.map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
+  const otp = OTP_DIGIT_POSITIONS.map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
   if (otp.length !== 6) { alert('Please enter the complete 6-digit OTP.'); return; }
   // TODO: Verify OTP with backend
   console.log('[Auth] OTP verification submitted:', otp);
@@ -5079,7 +5080,7 @@ function toggleEmailForm() {
 function resetOTPForm() {
   const phoneInput = document.getElementById('authPhoneInput');
   if (phoneInput) phoneInput.value = '';
-  OTP_DIGITS.forEach(function(n) {
+  OTP_DIGIT_POSITIONS.forEach(function(n) {
     const d = document.getElementById('otpD'+n);
     if (d) d.value = '';
   });
@@ -5091,7 +5092,7 @@ function resetOTPForm() {
 
 function otpDigitInput(el, n) {
   el.value = el.value.replace(/[^0-9]/g, '');
-  if (el.value && n < OTP_DIGITS.length) {
+  if (el.value && n < OTP_DIGIT_POSITIONS.length) {
     const next = document.getElementById('otpD' + (n + 1));
     if (next) next.focus();
   }
