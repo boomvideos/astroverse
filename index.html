@@ -4959,9 +4959,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Wrap showView to push a history entry on every view change
   const _svFinal = window.showView;
-  window.showView = function(id, _skipHistory) {
+  window.showView = function(id, skipHistory) {
     _svFinal(id);
-    if (!_skipHistory && !_historyNavigating) {
+    if (!skipHistory && !_historyNavigating) {
       // Only push if navigating to a different view than what's on the stack
       if (!history.state || history.state.view !== id) {
         history.pushState({ view: id }, '');
@@ -5050,8 +5050,10 @@ function sendOTP() {
   if (d1) d1.focus();
 }
 
+const OTP_DIGITS = [1,2,3,4,5,6];
+
 function verifyOTP() {
-  const otp = [1,2,3,4,5,6].map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
+  const otp = OTP_DIGITS.map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
   if (otp.length !== 6) { alert('Please enter the complete 6-digit OTP.'); return; }
   // TODO: Verify OTP with backend
   console.log('[Auth] OTP verification submitted:', otp);
@@ -5077,27 +5079,27 @@ function toggleEmailForm() {
 function resetOTPForm() {
   const phoneInput = document.getElementById('authPhoneInput');
   if (phoneInput) phoneInput.value = '';
-  [1,2,3,4,5,6].forEach(function(n) {
-    var d = document.getElementById('otpD'+n);
+  OTP_DIGITS.forEach(function(n) {
+    const d = document.getElementById('otpD'+n);
     if (d) d.value = '';
   });
-  var pig = document.getElementById('phoneInputGroup');
-  var oig = document.getElementById('otpInputGroup');
+  const pig = document.getElementById('phoneInputGroup');
+  const oig = document.getElementById('otpInputGroup');
   if (pig) pig.style.display = 'block';
   if (oig) oig.style.display = 'none';
 }
 
 function otpDigitInput(el, n) {
   el.value = el.value.replace(/[^0-9]/g, '');
-  if (el.value && n < 6) {
-    var next = document.getElementById('otpD' + (n + 1));
+  if (el.value && n < OTP_DIGITS.length) {
+    const next = document.getElementById('otpD' + (n + 1));
     if (next) next.focus();
   }
 }
 
 function otpKeyDown(e, el, n) {
   if (e.key === 'Backspace' && !el.value && n > 1) {
-    var prev = document.getElementById('otpD' + (n - 1));
+    const prev = document.getElementById('otpD' + (n - 1));
     if (prev) { prev.value = ''; prev.focus(); }
   }
 }
