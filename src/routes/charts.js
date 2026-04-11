@@ -2,21 +2,43 @@
 // ─────────────────────────────────────────────────
 // Chart persistence endpoints.
 //
-//   POST /api/charts   — save a generated chart (requires auth)
-//   GET  /api/charts   — retrieve all charts for the signed-in user
+//   POST /api/charts        — save a generated chart (requires auth)
+//   GET  /api/charts        — retrieve all charts for the signed-in user
+//   DELETE /api/charts/:id  — delete a chart owned by the signed-in user
 //
 // Authentication is enforced via Clerk's requireAuth middleware.
 // The Clerk user ID (req.userId) is used to scope charts per user.
+// Rate limiting is applied to all endpoints to prevent abuse.
 // ─────────────────────────────────────────────────
 
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import Chart from '../models/Chart.js';
 import { requireAuth } from '../../auth.js';
 
 const router = Router();
 
+// ── Rate limits ────────────────────────────────────
+// Chart writes: max 30 saves per 15 minutes per IP
+const chartWriteLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please wait before saving another chart.' },
+});
+
+// Chart reads: max 60 requests per 15 minutes per IP
+const chartReadLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please slow down.' },
+});
+
 // ── POST /api/charts — save a chart ──────────────
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', requireAuth, chartWriteLimiter, async (req, res) => {
   try {
     const {
       name, dob, time, place, gender, lang,
@@ -59,7 +81,7 @@ router.post('/', requireAuth, async (req, res) => {
 });
 
 // ── GET /api/charts — retrieve charts for the user ─
-router.get('/', requireAuth, async (req, res) => {
+router.get('/', requireAuth, chartReadLimiter, async (req, res) => {
   try {
     const charts = await Chart
       .find({ userId: req.userId })
@@ -75,7 +97,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 // ── DELETE /api/charts/:id — delete a single chart ─
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, chartWriteLimiter, async (req, res) => {
   try {
     const chart = await Chart.findOneAndDelete({
       _id:    req.params.id,

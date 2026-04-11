@@ -82,6 +82,17 @@ export const LP_LUCKY = {
 // ── Core Calculation Helpers ──────────────────────────────────
 
 /**
+ * Calculate Lahiri Ayanamsa (sidereal correction) for a given Julian Day.
+ * Formula: 23.85° at J2000.0, precessing at 50.3"/year.
+ *
+ * @param {number} JD - Julian Day Number
+ * @returns {number} Ayanamsa in degrees
+ */
+export function calcAyanamsa(JD) {
+  return 23.85 + (JD - 2451545.0) * (50.3 / 3600 / 365.25);
+}
+
+/**
  * Convert a date string and time string to Julian Day Number.
  * @param {string} date - ISO date string (YYYY-MM-DD)
  * @param {string} time - Time string (HH:MM), defaults to '12:00'
@@ -156,7 +167,7 @@ export function calcPlanets(date, time) {
   }
 
   // Lahiri Ayanamsa: 23.85° at J2000, precessing at ~50.3"/year
-  const ayanamsa = 23.85 + (JD - 2451545.0) * (50.3 / 3600 / 365.25);
+  const ayanamsa = calcAyanamsa(JD);
 
   const results = planetData.map(p => {
     const T_prev = (JD - 1 - 2451545.0) / 36525;
@@ -262,7 +273,7 @@ export function calcAscendant(date, time, lat, lng) {
   const ascTropical = (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
 
   // 5. Convert Tropical → Sidereal (Vedic) using Lahiri Ayanamsa
-  const ayanamsa    = 23.85 + (JD - 2451545.0) * (50.3 / 3600 / 365.25);
+  const ayanamsa    = calcAyanamsa(JD);
   const ascSidereal = ((ascTropical - ayanamsa) % 360 + 360) % 360;
 
   const signIdx = Math.floor(ascSidereal / 30) % 12;
@@ -394,7 +405,7 @@ export function detectDoshas(planets, ascIdx) {
   if (moon) {
     const todayJD = (new Date().getTime() / 86400000) + 2440587.5;
     const todayT  = (todayJD - 2451545.0) / 36525;
-    const todayAyanamsa      = 23.85 + (todayJD - 2451545.0) * (50.3 / 3600 / 365.25);
+    const todayAyanamsa      = calcAyanamsa(todayJD);
     const satTropToday       = ((50.0774 + 1222.4937 * todayT) % 360 + 360) % 360;
     const satSiderealToday   = ((satTropToday - todayAyanamsa) % 360 + 360) % 360;
     const transitSaturnSignIdx = Math.floor(satSiderealToday / 30) % 12;
