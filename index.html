@@ -5024,52 +5024,160 @@ function requireAuth(action, callback) {
   openAuthModal(action, callback);
 }
 
-// ── Auth Providers (UI hooks — wire up backend integrations when ready) ──
+// ── Auth Providers — wired to Clerk ──────────────────────────
+
+// Internal state for sign-in flow
+let _clerkSignInAttempt = null;
+
+// Listen for Clerk session changes — call pending callback on sign-in
+async function _onClerkSignIn() {
+  await initClerk();
+  if (window.Clerk) {
+    Clerk.addListener(function(resources) {
+      if (resources.user) {
+        // User has signed in — close modal and execute pending action
+        closeAuthModal();
+        if (_authCallback) {
+          const cb = _authCallback;
+          _authCallback = null;
+          cb();
+        }
+      }
+    });
+  }
+}
+_onClerkSignIn();
 
 function authWithGoogle() {
-  // TODO: Wire up Google OAuth2 / Firebase / Clerk
-  console.log('[Auth] Google sign-in initiated');
-  closeAuthModal();
-  if (_authCallback) _authCallback();
+  initClerk().then(function() {
+    closeAuthModal();
+    if (!window.Clerk) { alert('Authentication service not loaded. Please refresh.'); return; }
+    // Redirect-based Google OAuth via Clerk
+    try {
+      Clerk.client.signIn.authenticateWithRedirect({
+        strategy: 'oauth_google',
+        redirectUrl: window.location.href,
+        redirectUrlComplete: window.location.href,
+      }).catch(function(err) {
+        console.error('[Auth] Google OAuth error:', err);
+        // Fallback: open Clerk modal
+        Clerk.openSignIn();
+      });
+    } catch (e) {
+      Clerk.openSignIn();
+    }
+  });
 }
 
 function authWithFacebook() {
-  // TODO: Wire up Facebook OAuth
-  console.log('[Auth] Facebook sign-in initiated');
-  closeAuthModal();
-  if (_authCallback) _authCallback();
+  initClerk().then(function() {
+    closeAuthModal();
+    if (!window.Clerk) { alert('Authentication service not loaded. Please refresh.'); return; }
+    try {
+      Clerk.client.signIn.authenticateWithRedirect({
+        strategy: 'oauth_facebook',
+        redirectUrl: window.location.href,
+        redirectUrlComplete: window.location.href,
+      }).catch(function(err) {
+        console.error('[Auth] Facebook OAuth error:', err);
+        Clerk.openSignIn();
+      });
+    } catch (e) {
+      Clerk.openSignIn();
+    }
+  });
 }
 
-function sendOTP() {
+async function sendOTP() {
   const phone = document.getElementById('authPhoneInput').value.trim();
   if (phone.length !== 10) { alert('Please enter a valid 10-digit mobile number.'); return; }
-  // TODO: Wire up SMS OTP service (Twilio / Firebase / MSG91)
-  console.log('[Auth] OTP requested for +91' + phone);
-  document.getElementById('phoneInputGroup').style.display = 'none';
-  document.getElementById('otpInputGroup').style.display = 'block';
-  const d1 = document.getElementById('otpD1');
-  if (d1) d1.focus();
+
+  const fullPhone = '+91' + phone;
+  console.log('[Auth] OTP requested for', fullPhone);
+
+  await initClerk();
+  if (!window.Clerk) { alert('Authentication service not loaded. Please refresh.'); return; }
+
+  try {
+    _clerkSignInAttempt = await Clerk.client.signIn.create({
+      identifier: fullPhone,
+    });
+    await _clerkSignInAttempt.prepareFirstFactor({ strategy: 'phone_code' });
+    document.getElementById('phoneInputGroup').style.display = 'none';
+    document.getElementById('otpInputGroup').style.display = 'block';
+    const d1 = document.getElementById('otpD1');
+    if (d1) d1.focus();
+  } catch (err) {
+    console.error('[Auth] sendOTP error:', err);
+    // Fallback: open Clerk sign-in modal which handles phone auth
+    closeAuthModal();
+    Clerk.openSignIn();
+  }
 }
 
 const OTP_DIGIT_POSITIONS = [1,2,3,4,5,6];
 
-function verifyOTP() {
+async function verifyOTP() {
   const otp = OTP_DIGIT_POSITIONS.map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
   if (otp.length !== 6) { alert('Please enter the complete 6-digit OTP.'); return; }
-  // TODO: Verify OTP with backend
-  console.log('[Auth] OTP verification submitted:', otp);
-  closeAuthModal();
-  if (_authCallback) _authCallback();
+
+  if (!_clerkSignInAttempt) {
+    alert('Session expired. Please request OTP again.');
+    resetOTPForm();
+    return;
+  }
+
+  try {
+    const result = await _clerkSignInAttempt.attemptFirstFactor({ strategy: 'phone_code', code: otp });
+    if (result.status === 'complete') {
+      await Clerk.setActive({ session: result.createdSessionId });
+      closeAuthModal();
+      if (_authCallback) {
+        const cb = _authCallback;
+        _authCallback = null;
+        cb();
+      }
+    } else {
+      alert('Verification failed. Please try again.');
+    }
+  } catch (err) {
+    console.error('[Auth] verifyOTP error:', err);
+    const msg = err.errors?.[0]?.message || err.message || 'OTP verification failed.';
+    alert(msg);
+  }
 }
 
-function authWithEmail() {
+async function authWithEmail() {
   const email = document.getElementById('authEmail').value.trim();
   const pw    = document.getElementById('authPassword').value;
   if (!email || !pw) { alert('Please enter both email and password.'); return; }
-  // TODO: Wire up email/password authentication
-  console.log('[Auth] Email sign-in initiated:', email);
-  closeAuthModal();
-  if (_authCallback) _authCallback();
+
+  await initClerk();
+  if (!window.Clerk) { alert('Authentication service not loaded. Please refresh.'); return; }
+
+  try {
+    const result = await Clerk.client.signIn.create({
+      identifier: email,
+      password:   pw,
+    });
+    if (result.status === 'complete') {
+      await Clerk.setActive({ session: result.createdSessionId });
+      closeAuthModal();
+      if (_authCallback) {
+        const cb = _authCallback;
+        _authCallback = null;
+        cb();
+      }
+    } else {
+      // Multi-factor or other step needed — fall back to Clerk UI
+      closeAuthModal();
+      Clerk.openSignIn();
+    }
+  } catch (err) {
+    console.error('[Auth] Email sign-in error:', err);
+    const msg = err.errors?.[0]?.message || err.message || 'Sign-in failed. Please check your credentials.';
+    alert(msg);
+  }
 }
 
 function toggleEmailForm() {
@@ -5106,13 +5214,74 @@ function otpKeyDown(e, el, n) {
 }
 
 // ── Save Chart ──
-function saveChart() {
+async function saveChart() {
   if (!chartDataFull) { alert('Please generate your Kundli first.'); return; }
-  requireAuth('save', function() {
-    // TODO: POST chart data to backend API for MongoDB persistence
-    console.log('[Save] Chart data for:', chartDataFull.name);
-    alert('✨ Kundli saved successfully! Sign in to access it anytime from your account.');
-  });
+
+  // Require sign-in before saving
+  await initClerk();
+  const isSignedIn = window.Clerk && Clerk.user;
+
+  if (!isSignedIn) {
+    requireAuth('save', async function() {
+      await _doSaveChart();
+    });
+  } else {
+    await _doSaveChart();
+  }
+}
+
+async function _doSaveChart() {
+  const d = chartDataFull;
+
+  // Build a clean payload for the API
+  const payload = {
+    name:     d.name     || '',
+    dob:      d.dob      || '',
+    time:     d.time     || '',
+    place:    d.place    || '',
+    gender:   d.gender   || 'other',
+    lang:     d.lang     || 'en',
+    sunSign:  d.sunSign?.name  || d.sunSign  || '',
+    moonSign: d.moonP?.sign?.name || d.moonP?.sign || '',
+    ascendant: d.ascendant?.sign?.name || '',
+    nakshatra: d.nakshatra?.name || '',
+    lp:       d.lp || 0,
+    planets:  (d.planets || []).map(function(p) {
+      return {
+        name:      p.name,
+        signIdx:   p.signIdx,
+        signName:  p.sign?.name || '',
+        degree:    p.degree,
+        minutes:   p.minutes,
+        longitude: p.longitude,
+        retrograde: !!p.retrograde,
+      };
+    }),
+    dashaData: {
+      currentDashaIdx: d.dashaData?.currentDashaIdx || 0,
+      dashas: (d.dashaData?.dashas || []).map(function(dasha) {
+        return {
+          planet: dasha.planet,
+          years:  dasha.years,
+          start:  dasha.start ? new Date(dasha.start).toISOString() : null,
+          end:    dasha.end   ? new Date(dasha.end).toISOString()   : null,
+        };
+      }),
+    },
+  };
+
+  try {
+    if (typeof window.apiSaveChart === 'function') {
+      await window.apiSaveChart(payload);
+      alert('✨ Kundli saved successfully! View it anytime from "Saved Charts" in your account.');
+    } else {
+      // apiSaveChart not available (backend script not loaded)
+      alert('✨ Chart saved locally. Connect the backend to persist across devices.');
+    }
+  } catch (err) {
+    console.error('[Save] Chart save failed:', err);
+    alert('⚠️ Save failed: ' + (err.message || 'Unknown error'));
+  }
 }
 </script>
 
