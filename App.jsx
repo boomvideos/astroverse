@@ -14,6 +14,7 @@ const AstroApp  = lazy(() => import('./pages/AstroApp.jsx'));
 const Privacy   = lazy(() => import('./pages/Privacy.jsx'));
 const Terms     = lazy(() => import('./pages/Terms.jsx'));
 const NotFound  = lazy(() => import('./pages/NotFound.jsx'));
+const MyCharts  = lazy(() => import('./pages/MyCharts.jsx'));
 
 // ── Simple loading fallback ───────────────────────
 function PageLoader() {
@@ -65,7 +66,8 @@ export default function App() {
           {/* Protected: must be signed in */}
           <Route element={<ProtectedRoute />}>
             <Route element={<Layout />}>
-              <Route path="/app" element={<AstroApp />} />
+              <Route path="/app"        element={<AstroApp />} />
+              <Route path="/my-charts"  element={<MyCharts />} />
             </Route>
           </Route>
         </Routes>

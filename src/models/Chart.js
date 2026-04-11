@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 
 const ChartSchema = new Schema(
   {
+    userId: { type: String, required: true, index: true }, // Clerk user ID
     name:   { type: String, required: true, trim: true },
     dob:    { type: String, required: true },   // ISO date string
     time:   { type: String, default: '' },

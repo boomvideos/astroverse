@@ -1,7 +1,7 @@
 // frontend/src/components/Layout.jsx
 import { useState } from 'react';
 import { Link, NavLink, Outlet } from 'react-router-dom';
-import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from '@clerk/clerk-react';
 import SupportModal from './SupportModal.jsx';
 
 export default function Layout() {
@@ -25,6 +25,11 @@ export default function Layout() {
           <NavLink to="/app" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             My Kundli
           </NavLink>
+          <SignedIn>
+            <NavLink to="/my-charts" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+              Saved Charts
+            </NavLink>
+          </SignedIn>
           <button className="nav-link btn-ghost" onClick={() => openSupport('contact')}>
             Support
           </button>
@@ -32,8 +37,12 @@ export default function Layout() {
 
         <div className="nav-auth">
           <SignedOut>
-            <Link to="/sign-in" className="btn btn-outline">Sign In</Link>
-            <Link to="/sign-up" className="btn btn-primary">Get Started</Link>
+            <SignInButton mode="modal">
+              <button className="btn btn-outline">Sign In</button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <button className="btn btn-primary">Get Started</button>
+            </SignUpButton>
           </SignedOut>
           <SignedIn>
             {/* Clerk's pre-built user menu: avatar, manage account, sign out */}

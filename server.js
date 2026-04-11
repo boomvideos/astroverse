@@ -1,6 +1,5 @@
 // ═══════════════════════════════════════════════════════════════
-// AstroVerse — Backend Server  v3.1 (Template-Only, No Auth)
-// Clerk and Anthropic AI removed — template routes only
+// AstroVerse — Backend Server  v3.2 (Charts API + Clerk Auth)
 // ═══════════════════════════════════════════════════════════════
 
 import express from 'express';
@@ -11,9 +10,13 @@ import 'dotenv/config';
 // ── Database ─────────────────────────────────────────────────
 import connectDB from './src/config/db.js';
 
+// ── Auth ─────────────────────────────────────────────────────
+import { clerkHandler } from './auth.js';
+
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
 import templateRouter from './template-routes.js';
+import chartsRouter   from './src/routes/charts.js';
 
 // ── Validate critical env vars at startup ─────────────────────
 const REQUIRED_ENV = ['ALLOWED_ORIGIN'];
@@ -34,7 +37,7 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) return callback(null, true);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: false,
 }));
@@ -45,15 +48,24 @@ app.use(cors({
 app.set('trust proxy', 1);
 app.use(express.json({ limit: '10kb' }));
 
+// ── Clerk middleware (global — silently decodes JWT when present) ─
+// Only active when CLERK_SECRET_KEY is set in environment.
+if (process.env.CLERK_SECRET_KEY) {
+  app.use(clerkHandler);
+} else {
+  console.warn('⚠️  CLERK_SECRET_KEY not set — auth routes will return 401');
+}
+
 // ── Routes ────────────────────────────────────────────────────
 app.use('/', sitemapRouter);
 app.use('/api/template', templateRouter);
+app.use('/api/charts', chartsRouter);
 
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
-    service: 'AstroVerse Backend v3.1',
-    mode: 'template-only',
+    service: 'AstroVerse Backend v3.2',
+    mode: 'template + charts',
     timestamp: new Date().toISOString(),
   });
 });
@@ -64,7 +76,7 @@ connectDB();
 
 const server = app.listen(PORT, () => {
   console.log(`\n✅  AstroVerse Backend running on port ${PORT}`);
-  console.log(`    Mode    : Template-only (no AI, no auth)`);
+  console.log(`    Mode    : Template + Charts API`);
   console.log(`    Origin  : ${allowedOrigins.join(', ')}`);
   console.log(`    Health  : http://localhost:${PORT}/api/health\n`);
 });

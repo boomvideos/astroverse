@@ -34,6 +34,50 @@ async function apiPost(endpoint, body) {
   return res.json();
 }
 
+// ── Auth-aware POST helper (attaches Clerk JWT) ───────────────
+async function apiPostAuth(endpoint, body) {
+  let token = null;
+  try {
+    if (window.Clerk && Clerk.session) {
+      token = await Clerk.session.getToken();
+    }
+  } catch (e) { /* no token — continue unauthenticated */ }
+
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
+// ── Auth-aware GET helper (attaches Clerk JWT) ────────────────
+async function apiGetAuth(endpoint) {
+  let token = null;
+  try {
+    if (window.Clerk && Clerk.session) {
+      token = await Clerk.session.getToken();
+    }
+  } catch (e) { /* no token */ }
+
+  const headers = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(`${BACKEND_URL}${endpoint}`, { headers });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return res.json();
+}
+
 // ── Check backend reachability ────────────────────────────────
 async function checkBackend() {
   try {
@@ -47,6 +91,15 @@ async function checkBackend() {
   }
 }
 
+// ── Save chart to backend ─────────────────────────────────────
+window.apiSaveChart = async function(chartData) {
+  return apiPostAuth('/api/charts', chartData);
+};
+
+// ── Get user's saved charts from backend ─────────────────────
+window.apiGetCharts = async function() {
+  return apiGetAuth('/api/charts');
+};
 
 // ═══════════════════════════════════════════════════════════════
 // TEMPLATE-BASED FEATURES  (no AI — instant, free, always works)
