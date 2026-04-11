@@ -7,10 +7,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App.jsx';
 import './styles/global.css';   // your existing CSS variables go here
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Missing VITE_CLERK_PUBLISHABLE_KEY in .env');
-}
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_aGFuZHktYWtpdGEtMi5jbGVyay5hY2NvdW50cy5kZXYk";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
