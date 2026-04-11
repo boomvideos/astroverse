@@ -321,6 +321,68 @@ footer{background:rgba(5,8,16,0.98);border-top:1px solid var(--border);
 .lang-btn-name{font-size:0.9rem;font-weight:700;color:var(--gold);letter-spacing:1px;display:block;}
 .lang-btn-sub{font-size:0.72rem;color:var(--muted);display:block;margin-top:4px;}
 
+/* AUTH MODAL */
+#authModal{position:fixed;inset:0;z-index:10000;background:rgba(5,8,16,0.95);
+  backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px;}
+#authModal.open{display:flex;}
+.auth-shell{background:rgba(10,13,26,0.99);border:1px solid var(--border2);
+  border-radius:16px;width:100%;max-width:420px;padding:32px 28px;
+  box-shadow:var(--shadow);position:relative;max-height:90vh;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(201,168,76,0.2) transparent;}
+.auth-close{position:absolute;top:16px;right:16px;background:transparent;
+  border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
+  border-radius:50%;transition:0.2s;}
+.auth-close:hover{background:rgba(255,255,255,0.06);color:var(--light);}
+.auth-top{text-align:center;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.auth-options{padding-top:20px;display:flex;flex-direction:column;gap:10px;}
+.auth-btn{width:100%;padding:13px 20px;border-radius:8px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:1px;
+  font-weight:600;transition:0.2s;border:1px solid transparent;}
+.auth-google{background:#fff;color:#1f1f1f;border-color:rgba(0,0,0,0.1);}
+.auth-google:hover{background:#f5f5f5;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.auth-facebook{background:#1877F2;color:#fff;border-color:#1877F2;}
+.auth-facebook:hover{background:#166fe5;box-shadow:0 2px 8px rgba(24,119,242,0.3);}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:4px 0;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-divider span{font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:2px;color:var(--muted);}
+.auth-country-code{padding:12px 14px;background:rgba(0,0,0,0.3);
+  border:1px solid rgba(201,168,76,0.15);border-radius:6px 0 0 6px;
+  color:var(--muted);font-family:'Cinzel',serif;font-size:0.8rem;
+  display:flex;align-items:center;white-space:nowrap;}
+.auth-phone-input{flex:1;padding:12px 14px;background:rgba(0,0,0,0.3);
+  border:1px solid rgba(201,168,76,0.15);border-left:none;color:var(--light);
+  font-size:1rem;outline:none;transition:0.2s;min-width:0;}
+.auth-phone-input:focus{border-color:rgba(201,168,76,0.4);}
+.auth-otp-btn{padding:12px 16px;background:rgba(201,168,76,0.15);
+  border:1px solid var(--gold);border-radius:0 6px 6px 0;color:var(--gold);
+  font-family:'Cinzel',serif;font-size:0.7rem;letter-spacing:1px;cursor:pointer;
+  white-space:nowrap;transition:0.2s;}
+.auth-otp-btn:hover{background:var(--gold);color:var(--deep);}
+.auth-otp-digit{width:44px;height:52px;text-align:center;font-size:1.3rem;
+  background:rgba(0,0,0,0.3);border:1px solid rgba(201,168,76,0.2);border-radius:6px;
+  color:var(--light);outline:none;transition:0.2s;}
+.auth-otp-digit:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(201,168,76,0.1);}
+.auth-otp-verify{background:rgba(201,168,76,0.15);border:1px solid var(--gold);
+  color:var(--gold);width:100%;}
+.auth-otp-verify:hover{background:var(--gold);color:var(--deep);}
+.auth-link{background:transparent;border:none;color:var(--muted);cursor:pointer;
+  font-size:0.78rem;text-align:center;padding:6px;transition:0.2s;
+  font-family:'Crimson Pro',serif;}
+.auth-link:hover{color:var(--gold);}
+.auth-email-input{width:100%;padding:12px 14px;background:rgba(0,0,0,0.4);
+  border:1px solid rgba(201,168,76,0.15);border-radius:6px;color:var(--light);
+  font-size:0.95rem;outline:none;transition:0.2s;display:block;}
+.auth-email-input:focus{border-color:rgba(201,168,76,0.4);}
+.auth-email-submit{background:rgba(201,168,76,0.12);border:1px solid var(--gold);
+  color:var(--gold);width:100%;}
+.auth-email-submit:hover{background:var(--gold);color:var(--deep);}
+@media(max-width:480px){
+  .auth-shell{padding:24px 18px;}
+  .auth-otp-digit{width:38px;height:46px;font-size:1.1rem;}
+}
+
 /* WOW KUNDLI HEADLINE */
 .kundli-wow-header{text-align:center;padding:36px 20px 28px;
   background:linear-gradient(180deg,rgba(201,168,76,0.05),transparent);
@@ -1844,10 +1906,11 @@ function renderResult({name,dob,time,place,gender,lang,isHi,planets,sunSign,moon
 
   <!-- ACTION BAR -->
   <div class="action-bar">
-    <button class="action-btn primary" onclick="downloadReport()">📥 ${isHi?'रिपोर्ट':'Download'}</button>
+    <button class="action-btn" onclick="saveChart()">💾 ${isHi?'सेव करें':'Save'}</button>
+    <button class="action-btn primary" onclick="requireAuth('download',doDownloadReport)">📥 ${isHi?'रिपोर्ट':'Download'}</button>
     <button class="action-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
     <button class="action-btn" onclick="window.print()">🖨️ ${isHi?'प्रिंट':'Print'}</button>
-    <button class="action-btn" onclick="startJourney()">✦ ${isHi?'नई कुंडली':'New Chart'}</button>
+    <button class="action-btn" onclick="requireAuth('newchart',startJourney)">✦ ${isHi?'नई कुंडली':'New Chart'}</button>
   </div>
 
   <!-- TRUST BADGE -->
@@ -1882,7 +1945,7 @@ function renderResult({name,dob,time,place,gender,lang,isHi,planets,sunSign,moon
     <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
       <button class="btn-outline" onclick="window.open('https://wa.me/?text='+encodeURIComponent('मैंने AstroVerse AI पर अपनी कुंडली देखी! मेरा लग्न ${ascendant.sign?.name} और नक्षत्र ${nakshatra?.name} है। आप भी देखें!'),'_blank')">💬 WhatsApp</button>
       <button class="btn-outline" onclick="window.print()">🖨️ ${isHi?'प्रिंट करें':'Print'}</button>
-      <button class="btn-gold" onclick="startJourney()">${isHi?'नई कुंडली':'New Chart'}</button>
+      <button class="btn-gold" onclick="requireAuth('newchart',startJourney)">${isHi?'नई कुंडली':'New Chart'}</button>
     </div>
   </div>`;
 
@@ -2574,7 +2637,7 @@ function toggleSection(id) {
 // ══════════════════════════════════════════
 // DOWNLOAD REPORT (HTML → Print as PDF)
 // ══════════════════════════════════════════
-function downloadReport() {
+function doDownloadReport() {
   if(!chartDataFull) { alert('Please generate your Kundli first.'); return; }
   const d = chartDataFull;
   const isHi = d.isHi;
@@ -2693,6 +2756,77 @@ function shareWhatsApp() {
         <span class="lang-btn-sub">पूर्ण वैदिक विश्लेषण</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ══════ AUTH MODAL ══════ -->
+<div id="authModal">
+  <div class="auth-shell">
+    <button class="auth-close" onclick="closeAuthModal()" aria-label="Close">✕</button>
+
+    <!-- Header -->
+    <div class="auth-top">
+      <div style="font-size:2.5rem;margin-bottom:12px;">🔐</div>
+      <div id="authModalTitle" style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:8px;">SIGN IN TO CONTINUE</div>
+      <p id="authModalSubtitle" style="font-size:0.85rem;color:var(--muted);line-height:1.6;">Save your Kundli and access it anytime, anywhere.</p>
+    </div>
+
+    <div class="auth-options">
+
+      <!-- Google -->
+      <button class="auth-btn auth-google" onclick="authWithGoogle()">
+        <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.16C6.51 42.68 14.62 48 24 48z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.16C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.75l7.97-6.16z"/><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.33 2.56 13.22l7.98 6.16C12.43 13.72 17.74 9.5 24 9.5z"/></svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- Facebook -->
+      <button class="auth-btn auth-facebook" onclick="authWithFacebook()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <span>Continue with Facebook</span>
+      </button>
+
+      <!-- Divider -->
+      <div class="auth-divider"><span>OR</span></div>
+
+      <!-- Phone OTP -->
+      <div id="authPhoneSection">
+        <div id="phoneInputGroup">
+          <div style="display:flex;align-items:stretch;">
+            <div class="auth-country-code">🇮🇳 +91</div>
+            <input type="tel" id="authPhoneInput" class="auth-phone-input" placeholder="Mobile Number" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')"/>
+            <button class="auth-otp-btn" onclick="sendOTP()">Send OTP</button>
+          </div>
+        </div>
+        <div id="otpInputGroup" style="display:none;margin-top:12px;">
+          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;text-align:center;">Enter the 6-digit OTP sent to your number</p>
+          <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
+            <input type="text" id="otpD1" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,1)" onkeydown="otpKeyDown(event,this,1)"/>
+            <input type="text" id="otpD2" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,2)" onkeydown="otpKeyDown(event,this,2)"/>
+            <input type="text" id="otpD3" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,3)" onkeydown="otpKeyDown(event,this,3)"/>
+            <input type="text" id="otpD4" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,4)" onkeydown="otpKeyDown(event,this,4)"/>
+            <input type="text" id="otpD5" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,5)" onkeydown="otpKeyDown(event,this,5)"/>
+            <input type="text" id="otpD6" class="auth-otp-digit" maxlength="1" inputmode="numeric" oninput="otpDigitInput(this,6)" onkeydown="otpKeyDown(event,this,6)"/>
+          </div>
+          <button class="auth-btn auth-otp-verify" onclick="verifyOTP()">✓ Verify &amp; Sign In</button>
+          <div style="text-align:center;margin-top:8px;">
+            <button class="auth-link" onclick="resetOTPForm()">← Change Number</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email/Password toggle -->
+      <div style="text-align:center;">
+        <button class="auth-link" onclick="toggleEmailForm()">📧 Use Email &amp; Password instead</button>
+      </div>
+      <div id="authEmailForm" style="display:none;">
+        <input type="email" id="authEmail" class="auth-email-input" placeholder="Email address"/>
+        <input type="password" id="authPassword" class="auth-email-input" placeholder="Password" style="margin-top:8px;"/>
+        <button class="auth-btn auth-email-submit" style="margin-top:10px;" onclick="authWithEmail()">Sign In / Sign Up</button>
+      </div>
+
+    </div>
+
+    <p style="font-size:0.68rem;color:var(--muted);text-align:center;margin-top:20px;line-height:1.6;">By continuing you agree to our <a href="#" style="color:var(--gold);text-decoration:none;" onclick="return false;">Terms</a> &amp; <a href="#" style="color:var(--gold);text-decoration:none;" onclick="return false;">Privacy Policy</a>. Your birth data is encrypted and secure.</p>
   </div>
 </div>
 
@@ -4738,10 +4872,10 @@ function injectTabSystemAndExtras(d) { return; // Tab system disabled — all co
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <button class="btn-outline" onclick="showGunaMilan()" style="padding:12px;">💍 Guna Milan<br><span style="font-size:0.65rem;color:var(--muted);">36-point matching</span></button>
         <button class="btn-outline" onclick="showView('view-compat')" style="padding:12px;">💞 Compatibility<br><span style="font-size:0.65rem;color:var(--muted);">Vedic analysis</span></button>
-        <button class="btn-outline" onclick="downloadReport()" style="padding:12px;">📥 Download Report<br><span style="font-size:0.65rem;color:var(--muted);">HTML format</span></button>
+        <button class="btn-outline" onclick="requireAuth('download',doDownloadReport)" style="padding:12px;">📥 Download Report<br><span style="font-size:0.65rem;color:var(--muted);">HTML format</span></button>
         <button class="btn-outline" onclick="shareWhatsApp()" style="padding:12px;">💬 WhatsApp Share<br><span style="font-size:0.65rem;color:var(--muted);">Send to friends</span></button>
         <button class="btn-outline" onclick="showComparePage()" style="padding:12px;">⚔️ vs AstroSage<br><span style="font-size:0.65rem;color:var(--muted);">Feature comparison</span></button>
-        <button class="btn-outline" onclick="startJourney()" style="padding:12px;">✦ New Kundli<br><span style="font-size:0.65rem;color:var(--muted);">Start fresh</span></button>
+        <button class="btn-outline" onclick="requireAuth('newchart',startJourney)" style="padding:12px;">✦ New Kundli<br><span style="font-size:0.65rem;color:var(--muted);">Start fresh</span></button>
       </div>
     </div>`;
 
@@ -4817,7 +4951,166 @@ document.addEventListener('DOMContentLoaded', () => {
     const activeId = map[id];
     if(activeId) { const a=document.getElementById(activeId); if(a) a.classList.add('active'); }
   };
+
+  // ── Browser History: HTML5 History API routing ──
+  // Set initial state so back button works from the very first view
+  history.replaceState({ view: 'view-hero' }, '');
+  let _historyNavigating = false;
+
+  // Wrap showView to push a history entry on every view change
+  const _svFinal = window.showView;
+  window.showView = function(id, _skipHistory) {
+    _svFinal(id);
+    if (!_skipHistory && !_historyNavigating) {
+      // Only push if navigating to a different view than what's on the stack
+      if (!history.state || history.state.view !== id) {
+        history.pushState({ view: id }, '');
+      }
+    }
+  };
+
+  // Handle browser Back / Forward buttons
+  window.addEventListener('popstate', function(e) {
+    const targetView = (e.state && e.state.view) ? e.state.view : 'view-hero';
+    _historyNavigating = true;
+    window.showView(targetView, true);
+    _historyNavigating = false;
+  });
+
+  // ── Auth Modal: close on backdrop click ──
+  const _authModalEl = document.getElementById('authModal');
+  if (_authModalEl) {
+    _authModalEl.addEventListener('click', function(e) {
+      if (e.target === this) closeAuthModal();
+    });
+  }
 });
+
+// ═══════════════════════════════════════════════
+// AUTH MODAL — Feature-triggered authentication UI
+// Wire up OAuth / OTP backend integrations when ready
+// ═══════════════════════════════════════════════
+let _authCallback = null;
+
+const _AUTH_MESSAGES = {
+  save:     { title: 'SAVE YOUR KUNDLI',    sub: 'Create a free account to save and access your chart anytime, on any device.' },
+  download: { title: 'DOWNLOAD REPORT',     sub: 'Sign in to download your full Vedic Kundli report as a file.' },
+  newchart: { title: 'GENERATE NEW KUNDLI', sub: 'Sign in to generate unlimited charts and build your astrological collection.' },
+  default:  { title: 'SIGN IN TO CONTINUE', sub: 'Access premium features and save your astrological journey.' },
+};
+
+function openAuthModal(action, callback) {
+  const msg = _AUTH_MESSAGES[action] || _AUTH_MESSAGES.default;
+  const titleEl = document.getElementById('authModalTitle');
+  const subEl   = document.getElementById('authModalSubtitle');
+  if (titleEl) titleEl.textContent = msg.title;
+  if (subEl)   subEl.textContent   = msg.sub;
+  _authCallback = callback || null;
+  resetOTPForm();
+  const emailForm = document.getElementById('authEmailForm');
+  if (emailForm) emailForm.style.display = 'none';
+  const modal = document.getElementById('authModal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('authModal');
+  if (modal) modal.classList.remove('open');
+  _authCallback = null;
+}
+
+function requireAuth(action, callback) {
+  openAuthModal(action, callback);
+}
+
+// ── Auth Providers (UI hooks — wire up backend integrations when ready) ──
+
+function authWithGoogle() {
+  // TODO: Wire up Google OAuth2 / Firebase / Clerk
+  console.log('[Auth] Google sign-in initiated');
+  closeAuthModal();
+  if (_authCallback) _authCallback();
+}
+
+function authWithFacebook() {
+  // TODO: Wire up Facebook OAuth
+  console.log('[Auth] Facebook sign-in initiated');
+  closeAuthModal();
+  if (_authCallback) _authCallback();
+}
+
+function sendOTP() {
+  const phone = document.getElementById('authPhoneInput').value.trim();
+  if (phone.length !== 10) { alert('Please enter a valid 10-digit mobile number.'); return; }
+  // TODO: Wire up SMS OTP service (Twilio / Firebase / MSG91)
+  console.log('[Auth] OTP requested for +91' + phone);
+  document.getElementById('phoneInputGroup').style.display = 'none';
+  document.getElementById('otpInputGroup').style.display = 'block';
+  const d1 = document.getElementById('otpD1');
+  if (d1) d1.focus();
+}
+
+function verifyOTP() {
+  const otp = [1,2,3,4,5,6].map(function(n){ return document.getElementById('otpD'+n).value; }).join('');
+  if (otp.length !== 6) { alert('Please enter the complete 6-digit OTP.'); return; }
+  // TODO: Verify OTP with backend
+  console.log('[Auth] OTP verification submitted:', otp);
+  closeAuthModal();
+  if (_authCallback) _authCallback();
+}
+
+function authWithEmail() {
+  const email = document.getElementById('authEmail').value.trim();
+  const pw    = document.getElementById('authPassword').value;
+  if (!email || !pw) { alert('Please enter both email and password.'); return; }
+  // TODO: Wire up email/password authentication
+  console.log('[Auth] Email sign-in initiated:', email);
+  closeAuthModal();
+  if (_authCallback) _authCallback();
+}
+
+function toggleEmailForm() {
+  const form = document.getElementById('authEmailForm');
+  if (form) form.style.display = (form.style.display === 'none' ? 'block' : 'none');
+}
+
+function resetOTPForm() {
+  const phoneInput = document.getElementById('authPhoneInput');
+  if (phoneInput) phoneInput.value = '';
+  [1,2,3,4,5,6].forEach(function(n) {
+    var d = document.getElementById('otpD'+n);
+    if (d) d.value = '';
+  });
+  var pig = document.getElementById('phoneInputGroup');
+  var oig = document.getElementById('otpInputGroup');
+  if (pig) pig.style.display = 'block';
+  if (oig) oig.style.display = 'none';
+}
+
+function otpDigitInput(el, n) {
+  el.value = el.value.replace(/[^0-9]/g, '');
+  if (el.value && n < 6) {
+    var next = document.getElementById('otpD' + (n + 1));
+    if (next) next.focus();
+  }
+}
+
+function otpKeyDown(e, el, n) {
+  if (e.key === 'Backspace' && !el.value && n > 1) {
+    var prev = document.getElementById('otpD' + (n - 1));
+    if (prev) { prev.value = ''; prev.focus(); }
+  }
+}
+
+// ── Save Chart ──
+function saveChart() {
+  if (!chartDataFull) { alert('Please generate your Kundli first.'); return; }
+  requireAuth('save', function() {
+    // TODO: POST chart data to backend API for MongoDB persistence
+    console.log('[Save] Chart data for:', chartDataFull.name);
+    alert('✨ Kundli saved successfully! Sign in to access it anytime from your account.');
+  });
+}
 </script>
 
 <!-- ══ AstroVerse AI Backend Connector ══
