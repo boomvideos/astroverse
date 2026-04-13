@@ -1,7 +1,8 @@
-// frontend/src/App.jsx
+```javascript name=src/App.jsx
 import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useUser } from '@clerk/clerk-react';
+import { SignIn, SignUp } from '@clerk/clerk-react'; // Clerk imports
 import Layout from './components/Layout.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import CookieBanner from './components/CookieBanner.jsx';
@@ -16,7 +17,7 @@ const Terms     = lazy(() => import('./pages/Terms.jsx'));
 const NotFound  = lazy(() => import('./pages/NotFound.jsx'));
 const MyCharts  = lazy(() => import('./pages/MyCharts.jsx'));
 
-// ── Simple loading fallback ───────────────────────
+// ── Simple loading fallback ───────��───────────────
 function PageLoader() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
@@ -70,6 +71,10 @@ export default function App() {
               <Route path="/my-charts"  element={<MyCharts />} />
             </Route>
           </Route>
+
+          {/* Clerk Auth routes — 🟢 Yeh sabse last mein add karo */}
+          <Route path="/sign-in/*" element={<SignIn routing="path" path="/sign-in" />} />
+          <Route path="/sign-up/*" element={<SignUp routing="path" path="/sign-up" />} />
         </Routes>
       </Suspense>
     </>
