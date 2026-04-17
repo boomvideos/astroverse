@@ -15,7 +15,7 @@ import { clerkHandler } from './auth.js';
 
 // ── Routes ───────────────────────────────────────────────────
 import sitemapRouter  from './src/routes/sitemap.js';
-import templateRouter from './src/template-routes.js';
+import templateRouter from './template-routes.js';
 import chartsRouter   from './src/routes/charts.js';
 
 // ── Validate critical env vars at startup ─────────────────────
