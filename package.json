@@ -2,13 +2,14 @@
   "name": "astroverse",
   "private": true,
   "type": "module",
-  "scripts": {
+ "scripts": {
+    "start": "node server.js",
     "dev:backend": "node --watch server.js",
     "start:backend": "node server.js",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
-  },
+  }, 
   "dependencies": {
     "@clerk/clerk-react": "^5.61.4",
     "@clerk/express": "^2.1.0",
