@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
  "scripts": {
-    "start": "node server.js",
+    "start": "node src/server.js",
     "dev:backend": "node --watch server.js",
     "start:backend": "node server.js",
     "dev": "vite",
