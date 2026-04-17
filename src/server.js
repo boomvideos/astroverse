@@ -8,15 +8,15 @@ import helmet from 'helmet';
 import 'dotenv/config';
 
 // ── Database ─────────────────────────────────────────────────
-import connectDB from './src/config/db.js';
+import connectDB from './config/db.js';
 
 // ── Auth ─────────────────────────────────────────────────────
 import { clerkHandler } from './auth.js';
 
 // ── Routes ───────────────────────────────────────────────────
-import sitemapRouter  from './src/routes/sitemap.js';
+import sitemapRouter  from './routes/sitemap.js';
 import templateRouter from './template-routes.js';
-import chartsRouter   from './src/routes/charts.js';
+import chartsRouter   from './routes/charts.js';
 
 // ── Validate critical env vars at startup ─────────────────────
 const REQUIRED_ENV = ['ALLOWED_ORIGIN'];
