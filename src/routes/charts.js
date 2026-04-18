@@ -14,7 +14,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import Chart from '../models/Chart.js';
-import { requireAuth } from '../../auth.js';
+import { requireAuth } from '../auth.js';
 
 const router = Router();
 
