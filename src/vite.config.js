@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  root: "frontend",          // frontend/ folder mein index.html hai
+  root: "frontend",
   build: {
-    outDir: "../dist",       // build output root mein jaayega
+    outDir: "../dist",
     emptyOutDir: true,
   },
 });
